@@ -24,20 +24,23 @@ A comprehensive NestJS starter template with built-in authentication (JWT + Goog
 ## Installation
 
 1. Clone the repository
+
 ```bash
 git clone https://github.com/Datodia/nestjs-starter.git
 cd nestjs-starter
 ```
 
 2. Install dependencies
+
 ```bash
 npm install
 ```
 
 3. Set up environment variables by creating a `.env` file in the root directory:
+
 ```
-MONGO_URI=
-FRONT_URI=
+MONGO_URL=
+FRONT_URL=
 PORT=
 JWT_SECRET=
 
@@ -46,7 +49,7 @@ AWS_SECRET_ACCESS_KEY=
 AWS_BUCKET_NAME=
 AWS_REGION=
 
-CLOUD_FRONT_URI=
+CLOUD_FRONT_URL=
 
 GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
@@ -59,11 +62,13 @@ CORS_ORIGIN=
 ## Running the Application
 
 ### Development
+
 ```bash
 npm run start:dev
 ```
 
 ### Production
+
 ```bash
 npm run build
 npm run start:prod
@@ -72,6 +77,7 @@ npm run start:prod
 ## API Endpoints
 
 ### Authentication
+
 - `POST /auth/register` - Register a new user
 - `POST /auth/login` - Login with email and password
 - `GET /auth/google` - Initiate Google OAuth login
@@ -79,20 +85,22 @@ npm run start:prod
 - `GET /auth/current-user` - 🔒 Get current user profile (requires authentication)
 
 ### Users
+
 - `GET /users` - 🔒 Get all users (admin only)
 - `GET /users/:id` - 🔒 Get user by ID
 - `PATCH /users/:id` - 🔒 Update user
 - `DELETE /users/:id` - 🔒 Delete user
 
-
 ## Authentication Flow
 
 ### JWT Authentication
+
 1. User registers or logs in with email/password
 2. Server validates credentials and returns a JWT token
 3. Subsequent requests include this token in the Authorization header
 
 ### Google OAuth
+
 1. User initiates authentication via `/auth/google` endpoint
 2. After successful Google authentication, user is redirected back with a code
 3. Server exchanges this code for user information

@@ -18,15 +18,64 @@ const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
 const jwt_1 = require("@nestjs/jwt");
 const bcrypt = require("bcrypt");
+const crypto = require("crypto");
+const email_sender_service_1 = require("../email-sender/email-sender.service");
 let AuthService = class AuthService {
     userModel;
     jwtService;
-    constructor(userModel, jwtService) {
+    emailService;
+    constructor(userModel, jwtService, emailService) {
         this.userModel = userModel;
         this.jwtService = jwtService;
+        this.emailService = emailService;
+    }
+    async forgotPassword(email) {
+        const user = await this.userModel.findOne({ email });
+        if (user) {
+            const rawResetToken = crypto.randomBytes(32).toString('hex');
+            const hashedResetToken = crypto
+                .createHash('sha256')
+                .update(rawResetToken)
+                .digest('hex');
+            const resetTokenExpires = new Date();
+            resetTokenExpires.setMinutes(resetTokenExpires.getMinutes() + 15);
+            await this.userModel.findByIdAndUpdate(user._id, {
+                resetPasswordToken: hashedResetToken,
+                resetPasswordExpires: resetTokenExpires,
+            });
+            const resetLink = `${process.env.FRONT_URI || 'http://localhost:3000'}/auth/reset-password?token=${rawResetToken}`;
+            this.emailService
+                .sendEmailSomeone({
+                to: user.email,
+                subject: 'პაროლის აღდგენა - E-commerce',
+                text: `პაროლის აღდგენის ბმული: ${resetLink}`,
+                html: `<p>პაროლის შესაცვლელად გადადით <a href="${resetLink}">ბმულზე</a></p>`,
+            })
+                .catch((err) => console.error('Email sending failed:', err));
+        }
+        return {
+            message: 'თუ ელ-ფოსტა რეგისტრირებულია, თქვენ მიიღებთ აღდგენის ინსტრუქციას.',
+        };
+    }
+    async resetPassword(token, newPassword) {
+        const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+        const hashedPass = await bcrypt.hash(newPassword, 10);
+        const user = await this.userModel.findOneAndUpdate({
+            resetPasswordToken: hashedToken,
+            resetPasswordExpires: { $gt: new Date() },
+        }, {
+            password: hashedPass,
+            $unset: { resetPasswordToken: 1, resetPasswordExpires: 1 },
+        }, { new: true });
+        if (!user) {
+            throw new common_1.BadRequestException('ბმული არასწორია ან ვადა გაუვიდა');
+        }
+        return { message: 'პაროლი წარმატებით განახლდა' };
     }
     async signIn({ email, password }) {
-        const existUser = await this.userModel.findOne({ email }).select('+password');
+        const existUser = await this.userModel
+            .findOne({ email })
+            .select('+password');
         if (!existUser)
             throw new common_1.BadRequestException('Invalid Credentials');
         const isPassedEqual = await bcrypt.compare(password, existUser.password);
@@ -34,9 +83,11 @@ let AuthService = class AuthService {
             throw new common_1.BadRequestException('Invalid Credentials');
         const payLoad = {
             id: existUser._id,
-            role: existUser.role
+            role: existUser.role,
         };
-        const accessToken = await this.jwtService.sign(payLoad, { expiresIn: '1h' });
+        const accessToken = await this.jwtService.sign(payLoad, {
+            expiresIn: '1h',
+        });
         return { accessToken };
     }
     async signInWithGoogle(user) {
@@ -45,16 +96,18 @@ let AuthService = class AuthService {
             existsUser = await this.userModel.create({
                 email: user.email,
                 avatar: user.avatar,
-                fullName: user.fullName
+                fullName: user.fullName,
             });
         }
         existsUser.avatar = user.avatar;
         await existsUser.save();
         const payLoad = {
             id: existsUser._id,
-            role: existsUser.role
+            role: existsUser.role,
         };
-        const accessToken = await this.jwtService.sign(payLoad, { expiresIn: '1h' });
+        const accessToken = await this.jwtService.sign(payLoad, {
+            expiresIn: '1h',
+        });
         return accessToken;
     }
     async signUp({ email, fullName, password }) {
@@ -74,6 +127,7 @@ exports.AuthService = AuthService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, mongoose_1.InjectModel)('user')),
     __metadata("design:paramtypes", [mongoose_2.Model,
-        jwt_1.JwtService])
+        jwt_1.JwtService,
+        email_sender_service_1.EmailSenderService])
 ], AuthService);
 //# sourceMappingURL=auth.service.js.map

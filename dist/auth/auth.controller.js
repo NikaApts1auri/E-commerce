@@ -20,6 +20,8 @@ const sign_up_dto_1 = require("./dto/sign-up.dto");
 const google_oauth_guard_1 = require("../guards/google-oauth.guard");
 const is_auth_guard_1 = require("../guards/is-auth.guard");
 const user_decorator_1 = require("../decorators/user.decorator");
+const reset_password_dto_1 = require("./dto/reset-password.dto");
+const forgot_password_dto_1 = require("./dto/forgot-password.dto");
 let AuthController = class AuthController {
     authService;
     constructor(authService) {
@@ -41,6 +43,12 @@ let AuthController = class AuthController {
     }
     currentUser(userId) {
         return this.authService.getCurrentUser(userId);
+    }
+    async forgotPassword(forgotPasswordDto) {
+        return this.authService.forgotPassword(forgotPasswordDto.email);
+    }
+    async resetPassword(resetPasswordDto) {
+        return this.authService.resetPassword(resetPasswordDto.token, resetPasswordDto.newPassword);
     }
 };
 exports.AuthController = AuthController;
@@ -82,6 +90,20 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "currentUser", null);
+__decorate([
+    (0, common_1.Post)('/forgot-password'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [forgot_password_dto_1.ForgotPasswordDto]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "forgotPassword", null);
+__decorate([
+    (0, common_1.Post)('/reset-password'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [reset_password_dto_1.ResetPasswordDto]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "resetPassword", null);
 exports.AuthController = AuthController = __decorate([
     (0, common_1.Controller)('auth'),
     __metadata("design:paramtypes", [auth_service_1.AuthService])

@@ -16,6 +16,7 @@ const mongoose_1 = require("@nestjs/mongoose");
 const passport_1 = require("@nestjs/passport");
 const google_strategy_1 = require("./strategies/google.strategy");
 const user_entity_1 = require("../users/entities/user.entity");
+const email_sender_service_1 = require("../email-sender/email-sender.service");
 let AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule;
@@ -25,16 +26,13 @@ exports.AuthModule = AuthModule = __decorate([
             config_1.ConfigModule.forRoot(),
             jwt_1.JwtModule.register({
                 global: true,
-                secret: process.env.JWT_SECRET
+                secret: process.env.JWT_SECRET,
             }),
             passport_1.PassportModule.register({ defaultStrategy: 'google' }),
-            mongoose_1.MongooseModule.forFeature([{ name: 'user', schema: user_entity_1.userSchema }])
+            mongoose_1.MongooseModule.forFeature([{ name: 'user', schema: user_entity_1.userSchema }]),
         ],
         controllers: [auth_controller_1.AuthController],
-        providers: [
-            auth_service_1.AuthService,
-            google_strategy_1.GoogleStrategy,
-        ],
+        providers: [auth_service_1.AuthService, google_strategy_1.GoogleStrategy, email_sender_service_1.EmailSenderService],
     })
 ], AuthModule);
 //# sourceMappingURL=auth.module.js.map

@@ -1,22 +1,29 @@
-import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Role } from "src/enums/roles.enum";
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Role } from 'src/enums/roles.enum';
 
-@Schema({timestamps: true})
+@Schema({ timestamps: true })
 export class User {
-    @Prop({type: String})
-    fullName: string
+  @Prop({ type: String })
+  fullName: string;
 
-    @Prop({type: String, required: true})
-    email: string
+  @Prop({ type: String, required: true })
+  email: string;
 
-    @Prop({type: String, select: false})
-    password: string
+  @Prop({ type: String, select: false })
+  password: string;
 
-    @Prop({type: String, enum: Role, default: Role.STUDENT})
-    role: string
+  @Prop({ type: String, enum: Role, default: Role.USER })
+  role: string;
 
-    @Prop({type: String})
-    avatar: string
+  @Prop({ type: String })
+  avatar: string;
+
+  // 💥 აი ეს ორი ველი ჩაამატე აქ:
+  @Prop({ type: String, required: false })
+  resetPasswordToken?: string;
+
+  @Prop({ type: Date, required: false })
+  resetPasswordExpires?: Date;
 }
 
-export const userSchema = SchemaFactory.createForClass(User)
+export const userSchema = SchemaFactory.createForClass(User);

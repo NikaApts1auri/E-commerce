@@ -18,6 +18,8 @@ let User = class User {
     password;
     role;
     avatar;
+    resetPasswordToken;
+    resetPasswordExpires;
 };
 exports.User = User;
 __decorate([
@@ -33,13 +35,21 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "password", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ type: String, enum: roles_enum_1.Role, default: roles_enum_1.Role.STUDENT }),
+    (0, mongoose_1.Prop)({ type: String, enum: roles_enum_1.Role, default: roles_enum_1.Role.USER }),
     __metadata("design:type", String)
 ], User.prototype, "role", void 0);
 __decorate([
     (0, mongoose_1.Prop)({ type: String }),
     __metadata("design:type", String)
 ], User.prototype, "avatar", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: String, required: false }),
+    __metadata("design:type", String)
+], User.prototype, "resetPasswordToken", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: Date, required: false }),
+    __metadata("design:type", Date)
+], User.prototype, "resetPasswordExpires", void 0);
 exports.User = User = __decorate([
     (0, mongoose_1.Schema)({ timestamps: true })
 ], User);
