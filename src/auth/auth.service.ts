@@ -2,12 +2,13 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { JwtService } from '@nestjs/jwt';
-import { User } from 'src/users/entities/user.entity';
+
 import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
 import { EmailSenderService } from 'src/email-sender/email-sender.service';
 import { SignInDto } from './dto/sign-in.dto';
 import { SignUpDto } from './dto/sign-up.dto';
+import { User } from 'src/users/schema/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -112,6 +113,7 @@ export class AuthService {
         email: user.email,
         avatar: user.avatar,
         fullName: user.fullName,
+        isVerified: true,
       });
     }
     existsUser.avatar = user.avatar;

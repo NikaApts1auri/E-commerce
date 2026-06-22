@@ -97,6 +97,7 @@ let AuthService = class AuthService {
                 email: user.email,
                 avatar: user.avatar,
                 fullName: user.fullName,
+                isVerified: true,
             });
         }
         existsUser.avatar = user.avatar;

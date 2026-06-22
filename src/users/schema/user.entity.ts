@@ -18,7 +18,6 @@ export class User {
   @Prop({ type: String })
   avatar: string;
 
-  // 💥 აი ეს ორი ველი ჩაამატე აქ:
   @Prop({ type: String, required: false })
   resetPasswordToken?: string;
 

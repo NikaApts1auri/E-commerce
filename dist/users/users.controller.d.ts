@@ -6,7 +6,7 @@ export declare class UsersController {
     private readonly usersService;
     constructor(usersService: UsersService);
     findAll({ page, take }: QueryParams): Promise<{
-        users: (import("mongoose").Document<unknown, {}, import("./entities/user.entity").User> & import("./entities/user.entity").User & {
+        users: (import("mongoose").Document<unknown, {}, import("./schema/user.entity").User> & import("./schema/user.entity").User & {
             _id: import("mongoose").Types.ObjectId;
         } & {
             __v: number;
@@ -15,17 +15,17 @@ export declare class UsersController {
         page: number;
         take: number;
     }>;
-    findOne({ id }: IsValidMongoDBId): Promise<import("mongoose").Document<unknown, {}, import("./entities/user.entity").User> & import("./entities/user.entity").User & {
+    findOne({ id }: IsValidMongoDBId): Promise<import("mongoose").Document<unknown, {}, import("./schema/user.entity").User> & import("./schema/user.entity").User & {
         _id: import("mongoose").Types.ObjectId;
     } & {
         __v: number;
     }>;
-    update(requesterId: string, { id }: IsValidMongoDBId, updateUserDto: UpdateUserDto): Promise<(import("mongoose").Document<unknown, {}, import("./entities/user.entity").User> & import("./entities/user.entity").User & {
+    update(requesterId: string, { id }: IsValidMongoDBId, updateUserDto: UpdateUserDto): Promise<(import("mongoose").Document<unknown, {}, import("./schema/user.entity").User> & import("./schema/user.entity").User & {
         _id: import("mongoose").Types.ObjectId;
     } & {
         __v: number;
     }) | null>;
-    remove(requesterId: string, { id }: IsValidMongoDBId): Promise<(import("mongoose").Document<unknown, {}, import("./entities/user.entity").User> & import("./entities/user.entity").User & {
+    remove(requesterId: string, { id }: IsValidMongoDBId): Promise<(import("mongoose").Document<unknown, {}, import("./schema/user.entity").User> & import("./schema/user.entity").User & {
         _id: import("mongoose").Types.ObjectId;
     } & {
         __v: number;

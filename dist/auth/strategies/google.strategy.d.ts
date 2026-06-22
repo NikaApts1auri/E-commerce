@@ -1,4 +1,4 @@
-import { Strategy } from "passport-google-oauth2";
+import { Strategy } from 'passport-google-oauth2';
 declare const GoogleStrategy_base: new (...args: [] | [options: import("passport-google-oauth2").StrategyOptionsWithRequest] | [options: import("passport-google-oauth2").StrategyOptions]) => Strategy & {
     validate(...args: any[]): unknown;
 };

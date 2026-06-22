@@ -1,6 +1,6 @@
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Model } from 'mongoose';
-import { User } from './entities/user.entity';
+import { User } from './schema/user.entity';
 import { QueryParams } from './dto/query-params.dto';
 export declare class UsersService {
     private userModel;

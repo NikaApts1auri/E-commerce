@@ -23,13 +23,17 @@ let UsersService = class UsersService {
     }
     async findAll({ page, take }) {
         take = Math.min(take, 30);
-        const users = await this.userModel.find().sort({ _id: -1 }).skip((page - 1) * take).limit(page * take);
+        const users = await this.userModel
+            .find()
+            .sort({ _id: -1 })
+            .skip((page - 1) * take)
+            .limit(page * take);
         const total = await this.userModel.countDocuments();
         return {
             users,
             total,
             page,
-            take
+            take,
         };
     }
     async findOne(id) {
@@ -40,14 +44,18 @@ let UsersService = class UsersService {
     }
     async updateUser(requesterId, targetUserId, dto) {
         const requester = await this.findOne(requesterId);
-        if (requester.role !== 'admin' && requester._id.toString() !== targetUserId) {
+        if (requester.role !== 'admin' &&
+            requester._id.toString() !== targetUserId) {
             throw new common_1.ForbiddenException('You are not allowed to update this user');
         }
-        return await this.userModel.findByIdAndUpdate(targetUserId, dto, { new: true });
+        return await this.userModel.findByIdAndUpdate(targetUserId, dto, {
+            new: true,
+        });
     }
     async deleteUser(requesterId, targetUserId) {
         const requester = await this.findOne(requesterId);
-        if (requester.role !== 'admin' && requester._id.toString() !== targetUserId) {
+        if (requester.role !== 'admin' &&
+            requester._id.toString() !== targetUserId) {
             throw new common_1.ForbiddenException('You are not allowed to delete this user');
         }
         return this.userModel.findByIdAndDelete(targetUserId);

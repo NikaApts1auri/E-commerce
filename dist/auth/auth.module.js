@@ -15,8 +15,8 @@ const config_1 = require("@nestjs/config");
 const mongoose_1 = require("@nestjs/mongoose");
 const passport_1 = require("@nestjs/passport");
 const google_strategy_1 = require("./strategies/google.strategy");
-const user_entity_1 = require("../users/entities/user.entity");
 const email_sender_service_1 = require("../email-sender/email-sender.service");
+const user_entity_1 = require("../users/schema/user.entity");
 let AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule;
@@ -30,9 +30,10 @@ exports.AuthModule = AuthModule = __decorate([
             }),
             passport_1.PassportModule.register({ defaultStrategy: 'google' }),
             mongoose_1.MongooseModule.forFeature([{ name: 'user', schema: user_entity_1.userSchema }]),
+            passport_1.PassportModule.register({ defaultStrategy: 'google' }),
         ],
         controllers: [auth_controller_1.AuthController],
-        providers: [auth_service_1.AuthService, google_strategy_1.GoogleStrategy, email_sender_service_1.EmailSenderService],
+        providers: [auth_service_1.AuthService, google_strategy_1.GoogleStrategy, email_sender_service_1.EmailSenderService, google_strategy_1.GoogleStrategy],
     })
 ], AuthModule);
 //# sourceMappingURL=auth.module.js.map

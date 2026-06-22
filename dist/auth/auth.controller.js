@@ -16,12 +16,7 @@ exports.AuthController = void 0;
 const common_1 = require("@nestjs/common");
 const auth_service_1 = require("./auth.service");
 const sign_in_dto_1 = require("./dto/sign-in.dto");
-const sign_up_dto_1 = require("./dto/sign-up.dto");
 const google_oauth_guard_1 = require("../guards/google-oauth.guard");
-const is_auth_guard_1 = require("../guards/is-auth.guard");
-const user_decorator_1 = require("../decorators/user.decorator");
-const reset_password_dto_1 = require("./dto/reset-password.dto");
-const forgot_password_dto_1 = require("./dto/forgot-password.dto");
 let AuthController = class AuthController {
     authService;
     constructor(authService) {
@@ -30,25 +25,32 @@ let AuthController = class AuthController {
     async googleAuth() { }
     async googleRedirect(req, res) {
         if (req.query.error) {
-            return res.redirect(`${process.env.FRONT_URI}/auth/sign-in?error=google_auth_cancelled`);
+            return res.redirect(`${process.env.FRONT_URL}/auth/sign-in?error=google_auth_cancelled`);
         }
         const token = await this.authService.signInWithGoogle(req.user);
-        res.redirect(`${process.env.FRONT_URI}/auth/sign-in?token=${token}`);
+        res.cookie('access_token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+        });
+        return res.redirect(`${process.env.FRONT_URL}/dashboard`);
     }
-    signIn(signInDto) {
-        return this.authService.signIn(signInDto);
+    async signIn(signInDto, res) {
+        const { accessToken } = await this.authService.signIn(signInDto);
+        res.cookie('token', accessToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+        });
+        return res
+            .status(200)
+            .json({ success: true, message: 'Logged in successfully' });
     }
-    signUp(signUpDto) {
-        return this.authService.signUp(signUpDto);
-    }
-    currentUser(userId) {
-        return this.authService.getCurrentUser(userId);
-    }
-    async forgotPassword(forgotPasswordDto) {
-        return this.authService.forgotPassword(forgotPasswordDto.email);
-    }
-    async resetPassword(resetPasswordDto) {
-        return this.authService.resetPassword(resetPasswordDto.token, resetPasswordDto.newPassword);
+    async logout(res) {
+        res.clearCookie('access_token');
+        return res.status(200).json({ success: true, message: 'Logged out' });
     }
 };
 exports.AuthController = AuthController;
@@ -71,39 +73,18 @@ __decorate([
 __decorate([
     (0, common_1.Post)('/sign-in'),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Res)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [sign_in_dto_1.SignInDto]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:paramtypes", [sign_in_dto_1.SignInDto, Object]),
+    __metadata("design:returntype", Promise)
 ], AuthController.prototype, "signIn", null);
 __decorate([
-    (0, common_1.Post)('/sign-up'),
-    __param(0, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [sign_up_dto_1.SignUpDto]),
-    __metadata("design:returntype", void 0)
-], AuthController.prototype, "signUp", null);
-__decorate([
-    (0, common_1.Get)('/current-user'),
-    (0, common_1.UseGuards)(is_auth_guard_1.IsAuthGuard),
-    __param(0, (0, user_decorator_1.UserId)()),
+    (0, common_1.Post)('/logout'),
+    __param(0, (0, common_1.Res)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", void 0)
-], AuthController.prototype, "currentUser", null);
-__decorate([
-    (0, common_1.Post)('/forgot-password'),
-    __param(0, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [forgot_password_dto_1.ForgotPasswordDto]),
     __metadata("design:returntype", Promise)
-], AuthController.prototype, "forgotPassword", null);
-__decorate([
-    (0, common_1.Post)('/reset-password'),
-    __param(0, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [reset_password_dto_1.ResetPasswordDto]),
-    __metadata("design:returntype", Promise)
-], AuthController.prototype, "resetPassword", null);
+], AuthController.prototype, "logout", null);
 exports.AuthController = AuthController = __decorate([
     (0, common_1.Controller)('auth'),
     __metadata("design:paramtypes", [auth_service_1.AuthService])
