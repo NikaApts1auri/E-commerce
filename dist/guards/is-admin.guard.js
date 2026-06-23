@@ -24,17 +24,20 @@ let IsAdminGuard = class IsAdminGuard {
         if (!token) {
             throw new common_1.UnauthorizedException('Authentication token missing');
         }
+        let payload;
         try {
-            const payload = await this.jwtService.verify(token);
-            if (payload.role !== roles_enum_1.Role.ADMIN) {
-                throw new common_1.ForbiddenException('Permission denied. Admin role required.');
-            }
-            request.user = payload;
-            return true;
+            payload = await this.jwtService.verifyAsync(token, {
+                secret: process.env.JWT_SECRET,
+            });
         }
         catch (e) {
             throw new common_1.UnauthorizedException('Invalid or expired token');
         }
+        if (payload.role !== roles_enum_1.Role.ADMIN) {
+            throw new common_1.ForbiddenException('Permission denied. Admin role required.');
+        }
+        request.user = payload;
+        return true;
     }
 };
 exports.IsAdminGuard = IsAdminGuard;

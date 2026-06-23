@@ -14,25 +14,27 @@ export class IsAdminGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
-
     const token = request.cookies?.token;
 
     if (!token) {
       throw new UnauthorizedException('Authentication token missing');
     }
 
+    let payload;
+
     try {
-      const payload = await this.jwtService.verify(token);
-
-      if (payload.role !== Role.ADMIN) {
-        throw new ForbiddenException('Permission denied. Admin role required.');
-      }
-
-      request.user = payload;
-
-      return true;
+      payload = await this.jwtService.verifyAsync(token, {
+        secret: process.env.JWT_SECRET,
+      });
     } catch (e) {
       throw new UnauthorizedException('Invalid or expired token');
     }
+
+    if (payload.role !== Role.ADMIN) {
+      throw new ForbiddenException('Permission denied. Admin role required.');
+    }
+
+    request.user = payload;
+    return true;
   }
 }

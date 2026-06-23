@@ -48,9 +48,11 @@ let AuthController = class AuthController {
             sameSite: 'lax',
             maxAge: 7 * 24 * 60 * 60 * 1000,
         });
-        return res
-            .status(200)
-            .json({ success: true, message: 'Logged in successfully' });
+        return res.status(200).json({
+            success: true,
+            message: 'Logged in successfully',
+            accessToken: accessToken,
+        });
     }
     async logout(res) {
         res.clearCookie('token');
