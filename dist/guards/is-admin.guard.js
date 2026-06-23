@@ -20,25 +20,21 @@ let IsAdminGuard = class IsAdminGuard {
     }
     async canActivate(context) {
         const request = context.switchToHttp().getRequest();
-        const token = this.getToken(request['headers']);
-        if (!token)
-            throw new common_1.UnauthorizedException('permition denied');
+        const token = request.cookies?.token;
+        if (!token) {
+            throw new common_1.UnauthorizedException('Authentication token missing');
+        }
         try {
             const payload = await this.jwtService.verify(token);
-            if (payload.role !== roles_enum_1.Role.ADMIN)
-                throw new common_1.UnauthorizedException('permition denied');
-            request.role = payload.role;
+            if (payload.role !== roles_enum_1.Role.ADMIN) {
+                throw new common_1.ForbiddenException('Permission denied. Admin role required.');
+            }
+            request.user = payload;
             return true;
         }
         catch (e) {
-            throw new common_1.UnauthorizedException('permition denied');
+            throw new common_1.UnauthorizedException('Invalid or expired token');
         }
-    }
-    getToken(headers) {
-        if (!headers['authorization'])
-            return null;
-        const [type, token] = headers['authorization'].split(' ');
-        return type === 'Bearer' ? token : null;
     }
 };
 exports.IsAdminGuard = IsAdminGuard;

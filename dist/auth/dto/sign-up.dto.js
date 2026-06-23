@@ -15,6 +15,7 @@ class SignUpDto {
     email;
     password;
     fullName;
+    role;
 }
 exports.SignUpDto = SignUpDto;
 __decorate([
@@ -33,4 +34,9 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], SignUpDto.prototype, "fullName", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsIn)(['user'], { message: 'Role can only be user' }),
+    __metadata("design:type", String)
+], SignUpDto.prototype, "role", void 0);
 //# sourceMappingURL=sign-up.dto.js.map

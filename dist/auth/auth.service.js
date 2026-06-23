@@ -78,6 +78,9 @@ let AuthService = class AuthService {
             .select('+password');
         if (!existUser)
             throw new common_1.BadRequestException('Invalid Credentials');
+        if (!existUser.password) {
+            throw new common_1.BadRequestException('Invalid Credentials');
+        }
         const isPassedEqual = await bcrypt.compare(password, existUser.password);
         if (!isPassedEqual)
             throw new common_1.BadRequestException('Invalid Credentials');

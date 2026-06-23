@@ -32,25 +32,30 @@ export class AuthController {
 
     const token = await this.authService.signInWithGoogle(req.user);
 
-    res.cookie('access_token', token, {
+    res.cookie('token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 დღე
     });
 
-    //  რედირექტის დროს URL-ში ტოკენს აღარ ვატან
     return res.redirect(`${process.env.FRONT_URL}/dashboard`);
   }
+
+  @Post('/sign-up')
+  async signUp(@Body() signUpDto: SignUpDto) {
+    return await this.authService.signUp(signUpDto);
+  }
+
   @Post('/sign-in')
   async signIn(@Body() signInDto: SignInDto, @Res() res: Response) {
     const { accessToken } = await this.authService.signIn(signInDto);
 
     res.cookie('token', accessToken, {
-      httpOnly: true, //ეს რომ false იყოს ქუქიში ეგრეცე გამოჩნდებოდა ტოკენი
+      httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 დღე
     });
 
     return res
@@ -60,7 +65,9 @@ export class AuthController {
 
   @Post('/logout')
   async logout(@Res() res: Response) {
-    res.clearCookie('access_token');
-    return res.status(200).json({ success: true, message: 'Logged out' });
+    res.clearCookie('token');
+    return res
+      .status(200)
+      .json({ success: true, message: 'Logged out successfully' });
   }
 }

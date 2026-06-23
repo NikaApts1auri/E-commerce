@@ -17,6 +17,7 @@ const email_sender_module_1 = require("./email-sender/email-sender.module");
 const mailer_1 = require("@nestjs-modules/mailer");
 const app_service_1 = require("./app.service");
 const app_controller_1 = require("./app.controller");
+const products_module_1 = require("./products/products.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -42,6 +43,7 @@ exports.AppModule = AppModule = __decorate([
             auth_module_1.AuthModule,
             aws_s3_module_1.AwsS3Module,
             email_sender_module_1.EmailSenderModule,
+            products_module_1.ProductsModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

@@ -13,7 +13,7 @@ export class User {
   password: string;
 
   @Prop({ type: String, enum: Role, default: Role.USER })
-  role: string;
+  role: Role;
 
   @Prop({ type: String })
   avatar: string;

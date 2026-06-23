@@ -1,8 +1,9 @@
+import { Role } from 'src/enums/roles.enum';
 export declare class User {
     fullName: string;
     email: string;
     password: string;
-    role: string;
+    role: Role;
     avatar: string;
     resetPasswordToken?: string;
     resetPasswordExpires?: Date;

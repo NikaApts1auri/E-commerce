@@ -16,6 +16,7 @@ exports.AuthController = void 0;
 const common_1 = require("@nestjs/common");
 const auth_service_1 = require("./auth.service");
 const sign_in_dto_1 = require("./dto/sign-in.dto");
+const sign_up_dto_1 = require("./dto/sign-up.dto");
 const google_oauth_guard_1 = require("../guards/google-oauth.guard");
 let AuthController = class AuthController {
     authService;
@@ -28,13 +29,16 @@ let AuthController = class AuthController {
             return res.redirect(`${process.env.FRONT_URL}/auth/sign-in?error=google_auth_cancelled`);
         }
         const token = await this.authService.signInWithGoogle(req.user);
-        res.cookie('access_token', token, {
+        res.cookie('token', token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'lax',
             maxAge: 7 * 24 * 60 * 60 * 1000,
         });
         return res.redirect(`${process.env.FRONT_URL}/dashboard`);
+    }
+    async signUp(signUpDto) {
+        return await this.authService.signUp(signUpDto);
     }
     async signIn(signInDto, res) {
         const { accessToken } = await this.authService.signIn(signInDto);
@@ -49,8 +53,10 @@ let AuthController = class AuthController {
             .json({ success: true, message: 'Logged in successfully' });
     }
     async logout(res) {
-        res.clearCookie('access_token');
-        return res.status(200).json({ success: true, message: 'Logged out' });
+        res.clearCookie('token');
+        return res
+            .status(200)
+            .json({ success: true, message: 'Logged out successfully' });
     }
 };
 exports.AuthController = AuthController;
@@ -70,6 +76,13 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "googleRedirect", null);
+__decorate([
+    (0, common_1.Post)('/sign-up'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [sign_up_dto_1.SignUpDto]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "signUp", null);
 __decorate([
     (0, common_1.Post)('/sign-in'),
     __param(0, (0, common_1.Body)()),
