@@ -8,10 +8,11 @@ async function bootstrap() {
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
+      whitelist: true,
     }),
   );
 
-  app.use(cookieParser()); //ქუქიები რო წაიკიტხოს
+  app.use(cookieParser());
 
   const cors = process.env.CORS_ORIGIN?.split('.')?.map((o) => o.trim());
   app.enableCors({

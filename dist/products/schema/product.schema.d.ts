@@ -4,7 +4,9 @@ export declare class Product extends Document {
     productCode: string;
     price: number;
     stock: number;
-    description?: string;
+    description: string;
+    image: string;
+    isDeleted: boolean;
 }
 export declare const ProductSchema: import("mongoose").Schema<Product, import("mongoose").Model<Product, any, any, any, Document<unknown, any, Product> & Product & Required<{
     _id: unknown;

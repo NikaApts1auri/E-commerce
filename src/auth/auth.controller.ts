@@ -64,6 +64,31 @@ export class AuthController {
       accessToken: accessToken,
     });
   }
+  @Post('/forgot-password')
+  async forgotPassword(@Body('email') email: string) {
+    await this.authService.forgotPassword(email);
+
+    return {
+      success: true,
+      message: 'პაროლის აღდგენის ინსტრუქცია გაიგზავნა მითითებულ ელ-ფოსტაზე.',
+    };
+  }
+
+  @Post('/reset-password')
+  async resetPassword(
+    @Body() resetPasswordDto: any, // სასურველია შექმნა ცალკე DTO (token, newPassword)
+  ) {
+    // სერვისი შეამოწმებს ტოკენს და ბაზაში განაახლებს პაროლს ჰეშირებული ვერსიით
+    await this.authService.resetPassword(
+      resetPasswordDto.token,
+      resetPasswordDto.newPassword,
+    );
+
+    return {
+      success: true,
+      message: 'პაროლი წარმატებით შეიცვალა. შეგიძლიათ გაიაროთ ავტორიზაცია.',
+    };
+  }
 
   @Post('/logout')
   async logout(@Res() res: Response) {

@@ -22,10 +22,10 @@ let AwsS3Service = class AwsS3Service {
                 accessKeyId: process.env.AWS_ACCESS_KEY_ID,
                 secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
             },
-            region: process.env.AWS_REGION
+            region: process.env.AWS_REGION,
         });
     }
-    async uploadImage(filePath, file) {
+    async uploadFile(filePath, file) {
         if (!filePath || !file)
             throw new common_1.BadRequestException('File is required');
         try {
@@ -40,21 +40,31 @@ let AwsS3Service = class AwsS3Service {
             return filePath;
         }
         catch (e) {
-            console.log(e, "eent");
+            console.log(e, 'eent');
             throw new common_1.BadRequestException('Could not upload file');
         }
     }
     async getFile(filePath) {
         if (!filePath)
             throw new common_1.BadRequestException('File path is required');
-        return `${process.env.CLOUD_FRONT_URL}/${filePath}`;
+        const cloudFrontUrl = process.env.CLOUD_FRONT_URL;
+        if (!cloudFrontUrl) {
+            throw new common_1.BadRequestException('CLOUD_FRONT_URL is missing in .env file');
+        }
+        const cleanBaseUrl = cloudFrontUrl.endsWith('/')
+            ? cloudFrontUrl.slice(0, -1)
+            : cloudFrontUrl;
+        const cleanFilePath = filePath.startsWith('/')
+            ? filePath.slice(1)
+            : filePath;
+        return `${cleanBaseUrl}/${cleanFilePath}`;
     }
-    async deleteImg(filePath) {
+    async deleteFile(filePath) {
         if (!filePath)
             throw new common_1.BadRequestException('File path is required');
         const config = {
             Bucket: this.bucketName,
-            Key: filePath
+            Key: filePath,
         };
         const deleteCommand = new client_s3_1.DeleteObjectCommand(config);
         await this.storageService.send(deleteCommand);

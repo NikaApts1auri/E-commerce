@@ -8,6 +8,7 @@ async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     app.useGlobalPipes(new common_1.ValidationPipe({
         transform: true,
+        whitelist: true,
     }));
     app.use(cookieParser());
     const cors = process.env.CORS_ORIGIN?.split('.')?.map((o) => o.trim());

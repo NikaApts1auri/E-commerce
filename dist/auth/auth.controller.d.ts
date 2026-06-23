@@ -9,5 +9,13 @@ export declare class AuthController {
     googleRedirect(req: any, res: Response): Promise<void>;
     signUp(signUpDto: SignUpDto): Promise<string>;
     signIn(signInDto: SignInDto, res: Response): Promise<Response<any, Record<string, any>>>;
+    forgotPassword(email: string): Promise<{
+        success: boolean;
+        message: string;
+    }>;
+    resetPassword(resetPasswordDto: any): Promise<{
+        success: boolean;
+        message: string;
+    }>;
     logout(res: Response): Promise<Response<any, Record<string, any>>>;
 }

@@ -7,15 +7,21 @@ import {
   UseGuards,
   Delete,
   Param,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { IsAdminGuard } from 'src/guards/is-admin.guard';
+import { AwsS3Service } from '../aws-s3/aws-s3.service';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('products')
 export class ProductsController {
-  constructor(private readonly productsService: ProductsService) {}
-
+  constructor(
+    private readonly productsService: ProductsService,
+    private readonly awsS3Service: AwsS3Service,
+  ) {}
   // მაგალითად: /products?search=iPhone&page=1&limit=5
   @Get()
   async findAll(
@@ -30,14 +36,16 @@ export class ProductsController {
   }
 
   //
-
   @Post()
   @UseGuards(IsAdminGuard)
-  async create(@Body() createProductDto: CreateProductDto) {
-    return this.productsService.create(createProductDto);
+  @UseInterceptors(FileInterceptor('image'))
+  async createProduct(
+    @Body() createProductDto: CreateProductDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    return await this.productsService.createWithImage(createProductDto, file);
   }
 
-  //
   @Delete(':id')
   @UseGuards(IsAdminGuard)
   async remove(@Param('id') id: string) {

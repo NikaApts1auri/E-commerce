@@ -54,6 +54,20 @@ let AuthController = class AuthController {
             accessToken: accessToken,
         });
     }
+    async forgotPassword(email) {
+        await this.authService.forgotPassword(email);
+        return {
+            success: true,
+            message: 'პაროლის აღდგენის ინსტრუქცია გაიგზავნა მითითებულ ელ-ფოსტაზე.',
+        };
+    }
+    async resetPassword(resetPasswordDto) {
+        await this.authService.resetPassword(resetPasswordDto.token, resetPasswordDto.newPassword);
+        return {
+            success: true,
+            message: 'პაროლი წარმატებით შეიცვალა. შეგიძლიათ გაიაროთ ავტორიზაცია.',
+        };
+    }
     async logout(res) {
         res.clearCookie('token');
         return res
@@ -93,6 +107,20 @@ __decorate([
     __metadata("design:paramtypes", [sign_in_dto_1.SignInDto, Object]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "signIn", null);
+__decorate([
+    (0, common_1.Post)('/forgot-password'),
+    __param(0, (0, common_1.Body)('email')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "forgotPassword", null);
+__decorate([
+    (0, common_1.Post)('/reset-password'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "resetPassword", null);
 __decorate([
     (0, common_1.Post)('/logout'),
     __param(0, (0, common_1.Res)()),

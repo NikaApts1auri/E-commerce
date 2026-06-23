@@ -17,18 +17,22 @@ const common_1 = require("@nestjs/common");
 const products_service_1 = require("./products.service");
 const create_product_dto_1 = require("./dto/create-product.dto");
 const is_admin_guard_1 = require("../guards/is-admin.guard");
+const aws_s3_service_1 = require("../aws-s3/aws-s3.service");
+const platform_express_1 = require("@nestjs/platform-express");
 let ProductsController = class ProductsController {
     productsService;
-    constructor(productsService) {
+    awsS3Service;
+    constructor(productsService, awsS3Service) {
         this.productsService = productsService;
+        this.awsS3Service = awsS3Service;
     }
     async findAll(search, page, limit) {
         const pageNumber = page ? parseInt(page, 10) : 1;
         const limitNumber = limit ? parseInt(limit, 10) : 10;
         return this.productsService.findAll(search, pageNumber, limitNumber);
     }
-    async create(createProductDto) {
-        return this.productsService.create(createProductDto);
+    async createProduct(createProductDto, file) {
+        return await this.productsService.createWithImage(createProductDto, file);
     }
     async remove(id) {
         return this.productsService.remove(id);
@@ -47,11 +51,13 @@ __decorate([
 __decorate([
     (0, common_1.Post)(),
     (0, common_1.UseGuards)(is_admin_guard_1.IsAdminGuard),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('image')),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.UploadedFile)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_product_dto_1.CreateProductDto]),
+    __metadata("design:paramtypes", [create_product_dto_1.CreateProductDto, Object]),
     __metadata("design:returntype", Promise)
-], ProductsController.prototype, "create", null);
+], ProductsController.prototype, "createProduct", null);
 __decorate([
     (0, common_1.Delete)(':id'),
     (0, common_1.UseGuards)(is_admin_guard_1.IsAdminGuard),
@@ -62,6 +68,7 @@ __decorate([
 ], ProductsController.prototype, "remove", null);
 exports.ProductsController = ProductsController = __decorate([
     (0, common_1.Controller)('products'),
-    __metadata("design:paramtypes", [products_service_1.ProductsService])
+    __metadata("design:paramtypes", [products_service_1.ProductsService,
+        aws_s3_service_1.AwsS3Service])
 ], ProductsController);
 //# sourceMappingURL=products.controller.js.map

@@ -3,20 +3,26 @@ import { Document } from 'mongoose';
 
 @Schema({ timestamps: true })
 export class Product extends Document {
-  @Prop({ required: true, trim: true })
+  @Prop({ required: true })
   name: string;
 
-  @Prop({ required: true, unique: true, uppercase: true, trim: true })
+  @Prop({ required: true, unique: true })
   productCode: string;
 
-  @Prop({ required: true, min: 0 })
+  @Prop({ required: true })
   price: number;
 
-  @Prop({ required: true, min: 0, default: 0 })
+  @Prop({ required: true })
   stock: number;
 
-  @Prop({ trim: true })
-  description?: string;
+  @Prop()
+  description: string;
+
+  @Prop({ required: true })
+  image: string;
+
+  @Prop({ type: Boolean, default: false })
+  isDeleted: boolean;
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);
