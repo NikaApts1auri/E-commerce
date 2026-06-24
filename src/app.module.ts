@@ -9,6 +9,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { AppService } from './app.service';
 import { AppController } from './app.controller';
 import { ProductsModule } from './products/products.module';
+import { DiscountModule } from './discount/discount.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { ProductsModule } from './products/products.module';
     AwsS3Module,
     EmailSenderModule,
     ProductsModule,
+    DiscountModule,
   ],
   controllers: [AppController],
   providers: [AppService],

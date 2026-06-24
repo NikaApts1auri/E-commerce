@@ -1,7 +1,16 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { IsIn } from 'class-validator';
+import mongoose, { Document } from 'mongoose';
 
-@Schema({ timestamps: true })
+@Schema({
+  toJSON: {
+    virtuals: true,
+    transform: function (doc, ret) {
+      delete ret._id;
+      delete ret.__v;
+    },
+  },
+})
 export class Product extends Document {
   @Prop({ required: true })
   name: string;
@@ -23,6 +32,14 @@ export class Product extends Document {
 
   @Prop({ type: Boolean, default: false })
   isDeleted: boolean;
+
+  @Prop({ type: String, required: true })
+  category: string;
+
+  originalPrice?: number;
+  currentPrice?: number;
+  discountPercentage?: number;
+  isOnSale?: boolean;
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);

@@ -20,6 +20,11 @@ let Product = class Product extends mongoose_2.Document {
     description;
     image;
     isDeleted;
+    category;
+    originalPrice;
+    currentPrice;
+    discountPercentage;
+    isOnSale;
 };
 exports.Product = Product;
 __decorate([
@@ -50,8 +55,20 @@ __decorate([
     (0, mongoose_1.Prop)({ type: Boolean, default: false }),
     __metadata("design:type", Boolean)
 ], Product.prototype, "isDeleted", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: String, required: true }),
+    __metadata("design:type", String)
+], Product.prototype, "category", void 0);
 exports.Product = Product = __decorate([
-    (0, mongoose_1.Schema)({ timestamps: true })
+    (0, mongoose_1.Schema)({
+        toJSON: {
+            virtuals: true,
+            transform: function (doc, ret) {
+                delete ret._id;
+                delete ret.__v;
+            },
+        },
+    })
 ], Product);
 exports.ProductSchema = mongoose_1.SchemaFactory.createForClass(Product);
 exports.ProductSchema.index({ name: 'text', productCode: 'text' });

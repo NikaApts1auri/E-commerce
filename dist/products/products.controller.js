@@ -31,8 +31,11 @@ let ProductsController = class ProductsController {
         const limitNumber = limit ? parseInt(limit, 10) : 10;
         return this.productsService.findAll(search, pageNumber, limitNumber);
     }
+    async findOne(id) {
+        return this.productsService.findOne(id);
+    }
     async createProduct(createProductDto, file) {
-        return await this.productsService.createWithImage(createProductDto, file);
+        return await this.productsService.create(createProductDto, file);
     }
     async remove(id) {
         return this.productsService.remove(id);
@@ -48,6 +51,13 @@ __decorate([
     __metadata("design:paramtypes", [String, String, String]),
     __metadata("design:returntype", Promise)
 ], ProductsController.prototype, "findAll", null);
+__decorate([
+    (0, common_1.Get)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], ProductsController.prototype, "findOne", null);
 __decorate([
     (0, common_1.Post)(),
     (0, common_1.UseGuards)(is_admin_guard_1.IsAdminGuard),

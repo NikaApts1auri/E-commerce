@@ -13,6 +13,7 @@ const products_service_1 = require("./products.service");
 const products_controller_1 = require("./products.controller");
 const product_schema_1 = require("./schema/product.schema");
 const aws_s3_module_1 = require("../aws-s3/aws-s3.module");
+const discount_module_1 = require("../discount/discount.module");
 let ProductsModule = class ProductsModule {
 };
 exports.ProductsModule = ProductsModule;
@@ -20,6 +21,7 @@ exports.ProductsModule = ProductsModule = __decorate([
     (0, common_1.Module)({
         imports: [
             aws_s3_module_1.AwsS3Module,
+            discount_module_1.DiscountModule,
             mongoose_1.MongooseModule.forFeature([{ name: product_schema_1.Product.name, schema: product_schema_1.ProductSchema }]),
         ],
         controllers: [products_controller_1.ProductsController],

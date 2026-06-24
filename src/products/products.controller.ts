@@ -34,7 +34,11 @@ export class ProductsController {
 
     return this.productsService.findAll(search, pageNumber, limitNumber);
   }
-
+  //findone
+  @Get(':id')
+  async findOne(@Param('id') id: string) {
+    return this.productsService.findOne(id);
+  }
   //
   @Post()
   @UseGuards(IsAdminGuard)
@@ -43,7 +47,7 @@ export class ProductsController {
     @Body() createProductDto: CreateProductDto,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    return await this.productsService.createWithImage(createProductDto, file);
+    return await this.productsService.create(createProductDto, file);
   }
 
   @Delete(':id')

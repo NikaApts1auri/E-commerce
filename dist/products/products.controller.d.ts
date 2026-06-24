@@ -6,17 +6,14 @@ export declare class ProductsController {
     private readonly awsS3Service;
     constructor(productsService: ProductsService, awsS3Service: AwsS3Service);
     findAll(search?: string, page?: string, limit?: string): Promise<{
-        products: (import("mongoose").Document<unknown, {}, import("./schema/product.schema").Product> & import("./schema/product.schema").Product & Required<{
-            _id: unknown;
-        }> & {
-            __v: number;
-        })[];
+        products: any;
         meta: {
             total: number;
             page: number;
             lastPage: number;
         };
     }>;
+    findOne(id: string): Promise<any>;
     createProduct(createProductDto: CreateProductDto, file: Express.Multer.File): Promise<import("mongoose").Document<unknown, {}, import("./schema/product.schema").Product> & import("./schema/product.schema").Product & Required<{
         _id: unknown;
     }> & {

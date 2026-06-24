@@ -4,4 +4,5 @@ export declare class CreateProductDto {
     price: number;
     stock: number;
     description?: string;
+    category: string;
 }

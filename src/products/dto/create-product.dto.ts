@@ -6,6 +6,7 @@ import {
   IsOptional,
   Length,
   IsUppercase,
+  IsIn,
 } from 'class-validator';
 import { Exclude, Transform, Type } from 'class-transformer';
 
@@ -32,4 +33,19 @@ export class CreateProductDto {
   @IsString()
   @IsOptional()
   description?: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @IsIn([
+    'phone',
+    'tab',
+    'laptop',
+    'accessory',
+    'audio',
+    'smartwatch',
+    'camera',
+    'gaming',
+    'other',
+  ])
+  category: string;
 }
