@@ -1,1 +1,0 @@
-{"version":3,"file":"send-welcome-new-users.dto.js","sourceRoot":"","sources":["../../../src/email-sender/dto/send-welcome-new-users.dto.ts"],"names":[],"mappings":";;;;;;;;;;;;AAAA,qDAAyE;AAIzE,MAAa,sBAAsB;IAGjC,EAAE,CAAS;CACZ;AAJD,wDAIC;AADC;IAFC,IAAA,4BAAU,GAAE;IACZ,IAAA,yBAAO,GAAE;;kDACC"}
