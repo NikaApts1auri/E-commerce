@@ -2,7 +2,7 @@ import { Model } from 'mongoose';
 import { Product } from './schema/product.schema';
 import { CreateProductDto } from './dto/create-product.dto';
 import { AwsS3Service } from '../aws-s3/aws-s3.service';
-import { DiscountService } from 'src/discount/discount.service';
+import { DiscountService } from '../discount';
 export declare class ProductsService {
     private readonly productModel;
     private readonly awsS3Service;

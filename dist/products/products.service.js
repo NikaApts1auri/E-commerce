@@ -18,7 +18,7 @@ const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
 const product_schema_1 = require("./schema/product.schema");
 const aws_s3_service_1 = require("../aws-s3/aws-s3.service");
-const discount_service_1 = require("../discount/discount.service");
+const discount_1 = require("../discount");
 let ProductsService = class ProductsService {
     productModel;
     awsS3Service;
@@ -131,6 +131,6 @@ exports.ProductsService = ProductsService = __decorate([
     __param(0, (0, mongoose_1.InjectModel)(product_schema_1.Product.name)),
     __metadata("design:paramtypes", [mongoose_2.Model,
         aws_s3_service_1.AwsS3Service,
-        discount_service_1.DiscountService])
+        discount_1.DiscountService])
 ], ProductsService);
 //# sourceMappingURL=products.service.js.map
