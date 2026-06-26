@@ -14,6 +14,7 @@ const order_controller_1 = require("./order.controller");
 const order_schema_1 = require("./schema/order.schema");
 const product_schema_1 = require("../products/schema/product.schema");
 const email_sender_module_1 = require("../email-sender/email-sender.module");
+const user_entity_1 = require("../users/schema/user.entity");
 let OrderModule = class OrderModule {
 };
 exports.OrderModule = OrderModule;
@@ -23,6 +24,7 @@ exports.OrderModule = OrderModule = __decorate([
             mongoose_1.MongooseModule.forFeature([
                 { name: order_schema_1.Order.name, schema: order_schema_1.OrderSchema },
                 { name: product_schema_1.Product.name, schema: product_schema_1.ProductSchema },
+                { name: user_entity_1.User.name, schema: user_entity_1.userSchema },
             ]),
             email_sender_module_1.EmailSenderModule,
         ],
