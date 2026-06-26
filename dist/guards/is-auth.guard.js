@@ -19,23 +19,26 @@ let IsAuthGuard = class IsAuthGuard {
     }
     async canActivate(context) {
         const request = context.switchToHttp().getRequest();
-        const token = this.getToken(request['headers']);
+        let token = request.cookies['token'];
+        if (!token && request.headers['authorization']) {
+            token = this.getToken(request.headers);
+        }
         if (!token)
-            throw new common_1.UnauthorizedException('permition denied');
+            throw new common_1.UnauthorizedException('Permission denied');
         try {
             const payload = await this.jwtService.verify(token);
-            request.userId = payload.id;
-            request.role = payload.role;
+            request.user = { id: payload.id, role: payload.role };
             return true;
         }
         catch (e) {
-            throw new common_1.UnauthorizedException('permition denied');
+            throw new common_1.UnauthorizedException('Permission denied');
         }
     }
     getToken(headers) {
-        if (!headers['authorization'])
+        const authHeader = headers['authorization'];
+        if (!authHeader)
             return null;
-        const [type, token] = headers['authorization'].split(' ');
+        const [type, token] = authHeader.split(' ');
         return type === 'Bearer' ? token : null;
     }
 };

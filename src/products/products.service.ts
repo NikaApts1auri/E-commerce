@@ -118,7 +118,7 @@ export class ProductsService {
     // 4. პროდუქტის შექმნა
     const newProduct = new this.productModel({
       ...createProductDto,
-      category: createProductDto.category.toLowerCase(), // პირდაპირ სტრინგი
+      category: createProductDto.category.toLowerCase(),
       productCode: autoProductCode,
       image: imageUrl,
     });

@@ -12,6 +12,7 @@ import { DiscountModule } from 'src/discount/discount.module';
     DiscountModule,
     MongooseModule.forFeature([{ name: Product.name, schema: ProductSchema }]),
   ],
+  exports: [MongooseModule],
   controllers: [ProductsController],
   providers: [ProductsService],
 })

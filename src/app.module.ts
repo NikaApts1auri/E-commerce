@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
@@ -10,6 +10,10 @@ import { AppService } from './app.service';
 import { AppController } from './app.controller';
 import { ProductsModule } from './products/products.module';
 import { DiscountModule } from './discount/discount.module';
+import { CartModule } from './cart/cart.module';
+import { GuestMiddleware } from './Middleware/guest-Middleware';
+import { PaymentModule } from './payment/payment.module';
+import { OrderModule } from './order/order.module';
 
 @Module({
   imports: [
@@ -34,8 +38,15 @@ import { DiscountModule } from './discount/discount.module';
     EmailSenderModule,
     ProductsModule,
     DiscountModule,
+    CartModule,
+    PaymentModule,
+    OrderModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(GuestMiddleware).forRoutes('*');
+  }
+}

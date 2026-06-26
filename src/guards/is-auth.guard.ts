@@ -1,33 +1,39 @@
-import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from "@nestjs/common";
-import { JwtService } from "@nestjs/jwt";
-
+import {
+  CanActivate,
+  ExecutionContext,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class IsAuthGuard implements CanActivate {
-    constructor(
-        private jwtService: JwtService
-    ) {}
+  constructor(private jwtService: JwtService) {}
 
-    async canActivate(context: ExecutionContext): Promise<boolean> {
-        const request = context.switchToHttp().getRequest()
-        const token = this.getToken(request['headers'])
-        if (!token) throw new UnauthorizedException('permition denied')
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    const request = context.switchToHttp().getRequest();
 
-        try {
-            const payload = await this.jwtService.verify(token)
-            request.userId = payload.id
-            request.role = payload.role
+    let token = request.cookies['token'];
 
-            return true
-
-        } catch (e) {
-            throw new UnauthorizedException('permition denied')
-        }
+    if (!token && request.headers['authorization']) {
+      token = this.getToken(request.headers);
     }
 
-    getToken(headers) {
-        if (!headers['authorization']) return null
-        const [type, token] = headers['authorization'].split(' ')
-        return type === 'Bearer' ? token : null
+    if (!token) throw new UnauthorizedException('Permission denied');
+
+    try {
+      const payload = await this.jwtService.verify(token);
+      request.user = { id: payload.id, role: payload.role };
+      return true;
+    } catch (e) {
+      throw new UnauthorizedException('Permission denied');
     }
+  }
+
+  private getToken(headers: any) {
+    const authHeader = headers['authorization'];
+    if (!authHeader) return null;
+    const [type, token] = authHeader.split(' ');
+    return type === 'Bearer' ? token : null;
+  }
 }

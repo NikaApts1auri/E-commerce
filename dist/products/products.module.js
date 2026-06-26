@@ -24,6 +24,7 @@ exports.ProductsModule = ProductsModule = __decorate([
             discount_module_1.DiscountModule,
             mongoose_1.MongooseModule.forFeature([{ name: product_schema_1.Product.name, schema: product_schema_1.ProductSchema }]),
         ],
+        exports: [mongoose_1.MongooseModule],
         controllers: [products_controller_1.ProductsController],
         providers: [products_service_1.ProductsService],
     })

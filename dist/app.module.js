@@ -19,7 +19,14 @@ const app_service_1 = require("./app.service");
 const app_controller_1 = require("./app.controller");
 const products_module_1 = require("./products/products.module");
 const discount_module_1 = require("./discount/discount.module");
+const cart_module_1 = require("./cart/cart.module");
+const guest_Middleware_1 = require("./Middleware/guest-Middleware");
+const payment_module_1 = require("./payment/payment.module");
+const order_module_1 = require("./order/order.module");
 let AppModule = class AppModule {
+    configure(consumer) {
+        consumer.apply(guest_Middleware_1.GuestMiddleware).forRoutes('*');
+    }
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
@@ -46,6 +53,9 @@ exports.AppModule = AppModule = __decorate([
             email_sender_module_1.EmailSenderModule,
             products_module_1.ProductsModule,
             discount_module_1.DiscountModule,
+            cart_module_1.CartModule,
+            payment_module_1.PaymentModule,
+            order_module_1.OrderModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
