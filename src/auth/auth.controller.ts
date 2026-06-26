@@ -12,7 +12,9 @@ import { AuthService } from './auth.service';
 import { SignInDto } from './dto/sign-in.dto';
 import { SignUpDto } from './dto/sign-up.dto';
 import { GoogleOauthGuard } from 'src/guards/google-oauth.guard';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
@@ -42,11 +44,14 @@ export class AuthController {
     return res.redirect(`${process.env.FRONT_URL}/dashboard`);
   }
 
+  @ApiOperation({ summary: 'მომხმარებლის რეგისტრაცია' })
+  @ApiResponse({ status: 201, description: 'წარმატებით დარეგისტრირდა' })
   @Post('/sign-up')
   async signUp(@Body() signUpDto: SignUpDto) {
     return await this.authService.signUp(signUpDto);
   }
-
+  @ApiOperation({ summary: 'მომხმარებლის შესვლა სისტემაში' })
+  @ApiResponse({ status: 200, description: 'წარმატებული ავტორიზაცია' })
   @Post('/sign-in')
   async signIn(@Body() signInDto: SignInDto, @Res() res: Response) {
     const { accessToken } = await this.authService.signIn(signInDto);
@@ -64,6 +69,9 @@ export class AuthController {
       accessToken: accessToken,
     });
   }
+
+  @ApiOperation({ summary: 'პაროლის აღდგენის მოთხოვნა' })
+  @ApiResponse({ status: 200, description: 'ინსტრუქცია გაიგზავნა ფოსტაზე' })
   @Post('/forgot-password')
   async forgotPassword(@Body('email') email: string) {
     await this.authService.forgotPassword(email);
@@ -74,6 +82,8 @@ export class AuthController {
     };
   }
 
+  @ApiOperation({ summary: 'პაროლის განახლება' })
+  @ApiResponse({ status: 200, description: 'პაროლი წარმატებით შეიცვალა' })
   @Post('/reset-password')
   async resetPassword(
     @Body() resetPasswordDto: any, // სასურველია შექმნა ცალკე DTO (token, newPassword)
@@ -90,6 +100,8 @@ export class AuthController {
     };
   }
 
+  @ApiOperation({ summary: 'სისტემიდან გასვლა' })
+  @ApiResponse({ status: 200, description: 'წარმატებით გავიდა სისტემიდან' })
   @Post('/logout')
   async logout(@Res() res: Response) {
     res.clearCookie('token');

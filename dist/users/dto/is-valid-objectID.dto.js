@@ -10,12 +10,17 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.IsValidMongoDBId = void 0;
+const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
 class IsValidMongoDBId {
     id;
 }
 exports.IsValidMongoDBId = IsValidMongoDBId;
 __decorate([
+    (0, swagger_1.ApiProperty)({
+        example: '64f1b2b3c4d5e6f7a8b9c0d1',
+        description: 'MongoDB-ს ვალიდური ObjectID',
+    }),
     (0, class_validator_1.IsMongoId)(),
     __metadata("design:type", String)
 ], IsValidMongoDBId.prototype, "id", void 0);

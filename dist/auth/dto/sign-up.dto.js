@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SignUpDto = void 0;
+const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
 class SignUpDto {
     email;
@@ -19,22 +20,29 @@ class SignUpDto {
 }
 exports.SignUpDto = SignUpDto;
 __decorate([
+    (0, swagger_1.ApiProperty)({
+        example: 'user@example.com',
+        description: 'მომხმარებლის ელ-ფოსტა',
+    }),
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsEmail)(),
     __metadata("design:type", String)
 ], SignUpDto.prototype, "email", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({ example: 'password123', description: 'პაროლი (6-20 სიმბოლო)' }),
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.Length)(6, 20),
     __metadata("design:type", String)
 ], SignUpDto.prototype, "password", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({ example: 'გიორგი გიორგაძე' }),
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], SignUpDto.prototype, "fullName", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({ required: false, enum: ['user'] }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsIn)(['user'], { message: 'Role can only be user' }),
     __metadata("design:type", String)

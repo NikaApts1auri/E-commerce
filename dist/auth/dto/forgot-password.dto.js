@@ -10,12 +10,17 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ForgotPasswordDto = void 0;
+const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
 class ForgotPasswordDto {
     email;
 }
 exports.ForgotPasswordDto = ForgotPasswordDto;
 __decorate([
+    (0, swagger_1.ApiProperty)({
+        example: 'user@example.com',
+        description: 'მომხმარებლის ელ-ფოსტა',
+    }),
     (0, class_validator_1.IsEmail)({}, { message: 'გთხოვთ მიუთითოთ ვალიდური ელ-ფოსტის მისამართი' }),
     (0, class_validator_1.IsNotEmpty)({ message: 'ელ-ფოსტის ველი არ უნდა იყოს ცარიელი' }),
     __metadata("design:type", String)

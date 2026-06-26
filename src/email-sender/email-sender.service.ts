@@ -28,20 +28,15 @@ export class EmailSenderService {
     }
   }
 
-  // 2. Best Practice: მეთოდი მასობრივი (Bulk) იმეილების უსაფრთხოდ გასაგზავნად
   async sendBulkEmails(emails: string[], subject: string, text: string) {
-    // მასივიდან დუბლიკატების მოშორება
     const uniqueEmails = [...new Set(emails)];
 
-    // პრომისების მომზადება
     const emailPromises = uniqueEmails.map((to) =>
       this.sendEmailSomeone({ subject, to, text }),
     );
 
-    // უსაფრთხო პარალელური გაგზავნა (არ ფეთქდება ერთ შეცდომაზე)
     const results = await Promise.allSettled(emailPromises);
 
-    // სტატისტიკის მომზადება (სასარგებლოა რეპორტინგისთვის)
     const successful = results.filter((r) => r.status === 'fulfilled').length;
     const failed = results.filter((r) => r.status === 'rejected').length;
 

@@ -9,8 +9,26 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateOrderDto = void 0;
+exports.CreateOrderDto = exports.OrderItemDto = void 0;
+const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
+const class_transformer_1 = require("class-transformer");
+class OrderItemDto {
+    productId;
+    quantity;
+}
+exports.OrderItemDto = OrderItemDto;
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: '64f1b2b3c4d5e6f7a8b9c0d1' }),
+    (0, class_validator_1.IsMongoId)(),
+    __metadata("design:type", String)
+], OrderItemDto.prototype, "productId", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: 2 }),
+    (0, class_validator_1.IsInt)(),
+    (0, class_validator_1.Min)(1),
+    __metadata("design:type", Number)
+], OrderItemDto.prototype, "quantity", void 0);
 class CreateOrderDto {
     totalAmount;
     items;
@@ -18,14 +36,19 @@ class CreateOrderDto {
 }
 exports.CreateOrderDto = CreateOrderDto;
 __decorate([
+    (0, swagger_1.ApiProperty)({ example: 150.5, description: 'შეკვეთის საერთო ღირებულება' }),
     (0, class_validator_1.IsNumber)(),
     __metadata("design:type", Number)
 ], CreateOrderDto.prototype, "totalAmount", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({ type: [OrderItemDto], description: 'შეკვეთილი ნივთების სია' }),
     (0, class_validator_1.IsArray)(),
+    (0, class_validator_1.ValidateNested)({ each: true }),
+    (0, class_transformer_1.Type)(() => OrderItemDto),
     __metadata("design:type", Array)
 ], CreateOrderDto.prototype, "items", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({ example: '64f1b2b3c4d5e6f7a8b9c0d1' }),
     (0, class_validator_1.IsMongoId)(),
     __metadata("design:type", String)
 ], CreateOrderDto.prototype, "userId", void 0);

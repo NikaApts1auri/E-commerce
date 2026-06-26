@@ -7,7 +7,7 @@ export class Order extends Document {
   userId: Types.ObjectId;
 
   @Prop({ type: Array, required: true })
-  items: any[]; // აქ შეინახე კალათის ნივთები
+  items: any[];
 
   @Prop({ required: true })
   totalAmount: number;

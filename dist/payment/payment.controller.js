@@ -14,6 +14,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PaymentController = void 0;
 const common_1 = require("@nestjs/common");
+const swagger_1 = require("@nestjs/swagger");
 const payment_service_1 = require("./payment.service");
 let PaymentController = class PaymentController {
     paymentService;
@@ -30,6 +31,20 @@ let PaymentController = class PaymentController {
 };
 exports.PaymentController = PaymentController;
 __decorate([
+    (0, swagger_1.ApiOperation)({
+        summary: 'Stripe Webhook',
+        description: 'ეს ენდპოინტი გამოიყენება მხოლოდ Stripe-ის მიერ გადახდის სტატუსის განახლებისთვის. მომხმარებლისთვის არ არის განკუთვნილი.',
+    }),
+    (0, swagger_1.ApiHeader)({
+        name: 'stripe-signature',
+        description: 'Stripe-ის მიერ გამოგზავნილი დაცვის ხელმოწერა',
+        required: true,
+    }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Webhook წარმატებით მიღებულია' }),
+    (0, swagger_1.ApiResponse)({
+        status: 400,
+        description: 'არასწორი მოთხოვნა (Missing Raw Body)',
+    }),
     (0, common_1.Post)('webhook'),
     __param(0, (0, common_1.Req)()),
     __param(1, (0, common_1.Headers)('stripe-signature')),
@@ -38,6 +53,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], PaymentController.prototype, "handleWebhook", null);
 exports.PaymentController = PaymentController = __decorate([
+    (0, swagger_1.ApiTags)('payment'),
     (0, common_1.Controller)('payment'),
     __metadata("design:paramtypes", [payment_service_1.PaymentService])
 ], PaymentController);

@@ -4,17 +4,25 @@ const core_1 = require("@nestjs/core");
 const app_module_1 = require("./app.module");
 const common_1 = require("@nestjs/common");
 const cookieParser = require("cookie-parser");
+const swagger_1 = require("@nestjs/swagger");
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule, { rawBody: true });
     app.useGlobalPipes(new common_1.ValidationPipe({ transform: true, whitelist: true }));
     app.use(cookieParser());
     app.enableCors({
-        origin: process.env.CORS_ORIGIN?.split(','),
+        origin: process.env.CORS_ORIGIN?.split(',') || [process.env.FRONT_URL],
         credentials: true,
     });
-    const port = process.env.PORT || 3000;
+    const config = new swagger_1.DocumentBuilder()
+        .setTitle('E-commerce API')
+        .setDescription('E-commerce აპლიკაციის API დოკუმენტაცია')
+        .setVersion('1.0')
+        .addCookieAuth('token')
+        .build();
+    const document = swagger_1.SwaggerModule.createDocument(app, config);
+    swagger_1.SwaggerModule.setup('api', app, document);
+    const port = process.env.PORT || 300;
     await app.listen(port, '0.0.0.0');
-    console.log(`Application is running on: ${await app.getUrl()}`);
 }
 bootstrap();
 //# sourceMappingURL=main.js.map

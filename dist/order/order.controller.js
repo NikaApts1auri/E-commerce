@@ -14,6 +14,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrderController = void 0;
 const common_1 = require("@nestjs/common");
+const swagger_1 = require("@nestjs/swagger");
 const order_service_1 = require("./order.service");
 const order_dto_1 = require("./dto/order.dto");
 let OrderController = class OrderController {
@@ -30,6 +31,8 @@ let OrderController = class OrderController {
 };
 exports.OrderController = OrderController;
 __decorate([
+    (0, swagger_1.ApiOperation)({ summary: 'ახალი შეკვეთის შექმნა' }),
+    (0, swagger_1.ApiResponse)({ status: 201, description: 'შეკვეთა წარმატებით შეიქმნა' }),
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -37,6 +40,9 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], OrderController.prototype, "create", null);
 __decorate([
+    (0, swagger_1.ApiOperation)({ summary: 'შეკვეთის დეტალების მიღება ID-ით' }),
+    (0, swagger_1.ApiParam)({ name: 'id', description: 'შეკვეთის უნიკალური ID' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'შეკვეთის დეტალები' }),
     (0, common_1.Get)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
@@ -44,6 +50,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], OrderController.prototype, "findOne", null);
 exports.OrderController = OrderController = __decorate([
+    (0, swagger_1.ApiTags)('order'),
     (0, common_1.Controller)('order'),
     __metadata("design:paramtypes", [order_service_1.OrderService])
 ], OrderController);

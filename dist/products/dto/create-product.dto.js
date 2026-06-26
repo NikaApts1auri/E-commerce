@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateProductDto = void 0;
+const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
 const class_transformer_1 = require("class-transformer");
 class CreateProductDto {
@@ -22,6 +23,10 @@ class CreateProductDto {
 }
 exports.CreateProductDto = CreateProductDto;
 __decorate([
+    (0, swagger_1.ApiProperty)({
+        example: 'iPhone 15 Pro',
+        description: 'პროდუქტის დასახელება',
+    }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.Length)(3, 100),
@@ -32,12 +37,14 @@ __decorate([
     __metadata("design:type", String)
 ], CreateProductDto.prototype, "productCode", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({ example: 2999.99, description: 'პროდუქტის ფასი' }),
     (0, class_validator_1.IsNumber)(),
     (0, class_validator_1.Min)(0, { message: 'Price cannot be negative' }),
     (0, class_transformer_1.Type)(() => Number),
     __metadata("design:type", Number)
 ], CreateProductDto.prototype, "price", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({ example: 50, description: 'მარაგში არსებული რაოდენობა' }),
     (0, class_validator_1.IsNumber)(),
     (0, class_validator_1.Min)(0, { message: 'Stock cannot be negative' }),
     (0, class_transformer_1.Transform)(({ value }) => Number(value)),
@@ -45,11 +52,29 @@ __decorate([
     __metadata("design:type", Number)
 ], CreateProductDto.prototype, "stock", void 0);
 __decorate([
+    (0, swagger_1.ApiPropertyOptional)({
+        example: 'ახალი თაობის სმარტფონი',
+        description: 'პროდუქტის აღწერა',
+    }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], CreateProductDto.prototype, "description", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({
+        enum: [
+            'phone',
+            'tab',
+            'laptop',
+            'accessory',
+            'audio',
+            'smartwatch',
+            'camera',
+            'gaming',
+            'other',
+        ],
+        description: 'პროდუქტის კატეგორია',
+    }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsIn)([

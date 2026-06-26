@@ -14,6 +14,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersController = void 0;
 const common_1 = require("@nestjs/common");
+const swagger_1 = require("@nestjs/swagger");
 const users_service_1 = require("./users.service");
 const update_user_dto_1 = require("./dto/update-user.dto");
 const query_params_dto_1 = require("./dto/query-params.dto");
@@ -41,6 +42,10 @@ let UsersController = class UsersController {
 };
 exports.UsersController = UsersController;
 __decorate([
+    (0, swagger_1.ApiOperation)({
+        summary: 'ყველა მომხმარებლის მიღება (მხოლოდ ადმინისტრატორისთვის)',
+    }),
+    (0, swagger_1.ApiSecurity)('token'),
     (0, common_1.UseGuards)(is_admin_guard_1.IsAdminGuard),
     (0, common_1.Get)(),
     __param(0, (0, common_1.Query)()),
@@ -49,6 +54,8 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "findAll", null);
 __decorate([
+    (0, swagger_1.ApiOperation)({ summary: 'მომხმარებლის მიღება ID-ით' }),
+    (0, swagger_1.ApiParam)({ name: 'id', description: 'მომხმარებლის MongoDB ID' }),
     (0, common_1.Get)(':id'),
     __param(0, (0, common_1.Param)()),
     __metadata("design:type", Function),
@@ -56,6 +63,8 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "findOne", null);
 __decorate([
+    (0, swagger_1.ApiOperation)({ summary: 'მომხმარებლის მონაცემების განახლება' }),
+    (0, swagger_1.ApiParam)({ name: 'id', description: 'მომხმარებლის MongoDB ID' }),
     (0, common_1.Patch)(':id'),
     __param(0, (0, user_decorator_1.UserId)()),
     __param(1, (0, common_1.Param)()),
@@ -66,6 +75,8 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "update", null);
 __decorate([
+    (0, swagger_1.ApiOperation)({ summary: 'მომხმარებლის წაშლა' }),
+    (0, swagger_1.ApiParam)({ name: 'id', description: 'მომხმარებლის MongoDB ID' }),
     (0, common_1.Delete)(':id'),
     __param(0, (0, user_decorator_1.UserId)()),
     __param(1, (0, common_1.Param)()),
@@ -74,6 +85,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "remove", null);
 exports.UsersController = UsersController = __decorate([
+    (0, swagger_1.ApiTags)('users'),
     (0, common_1.UseGuards)(is_auth_guard_1.IsAuthGuard),
     (0, common_1.Controller)('users'),
     __metadata("design:paramtypes", [users_service_1.UsersService])

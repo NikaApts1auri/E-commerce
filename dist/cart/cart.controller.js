@@ -19,6 +19,7 @@ const add_to_cart_dto_1 = require("./dto/add-to-cart.dto");
 const is_auth_guard_1 = require("../guards/is-auth.guard");
 const mongoose_1 = require("mongoose");
 const update_cart_dto_1 = require("./dto/update-cart.dto");
+const swagger_1 = require("@nestjs/swagger");
 let CartController = class CartController {
     cartService;
     constructor(cartService) {
@@ -48,6 +49,8 @@ let CartController = class CartController {
 };
 exports.CartController = CartController;
 __decorate([
+    (0, swagger_1.ApiOperation)({ summary: 'პროდუქტის კალათაში დამატება' }),
+    (0, swagger_1.ApiResponse)({ status: 201, description: 'პროდუქტი წარმატებით დაემატა' }),
     (0, common_1.Post)(),
     __param(0, (0, common_1.Req)()),
     __param(1, (0, common_1.Body)()),
@@ -56,6 +59,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], CartController.prototype, "addToCart", null);
 __decorate([
+    (0, swagger_1.ApiOperation)({ summary: 'კალათის მიღება' }),
     (0, common_1.Get)(),
     __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
@@ -63,6 +67,8 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], CartController.prototype, "getCart", null);
 __decorate([
+    (0, swagger_1.ApiOperation)({ summary: 'პროდუქტის წაშლა კალათიდან' }),
+    (0, swagger_1.ApiParam)({ name: 'productId', description: 'პროდუქტის უნიკალური ID' }),
     (0, common_1.Delete)(':productId'),
     __param(0, (0, common_1.Req)()),
     __param(1, (0, common_1.Param)('productId')),
@@ -71,6 +77,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], CartController.prototype, "removeItem", null);
 __decorate([
+    (0, swagger_1.ApiOperation)({ summary: 'მთლიანი კალათის გასუფთავება' }),
     (0, common_1.Delete)('clear'),
     __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
@@ -78,6 +85,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], CartController.prototype, "clearCart", null);
 __decorate([
+    (0, swagger_1.ApiOperation)({ summary: 'კალათაში პროდუქტის რაოდენობის განახლება' }),
     (0, common_1.Patch)(),
     __param(0, (0, common_1.Req)()),
     __param(1, (0, common_1.Body)()),
@@ -86,6 +94,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], CartController.prototype, "updateItem", null);
 exports.CartController = CartController = __decorate([
+    (0, swagger_1.ApiTags)('cart'),
     (0, common_1.Controller)('cart'),
     (0, common_1.UseGuards)(is_auth_guard_1.IsAuthGuard),
     __metadata("design:paramtypes", [cart_service_1.CartService])

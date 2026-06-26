@@ -19,6 +19,7 @@ const create_discount_dto_1 = require("./dto/create-discount.dto");
 const role_decorator_1 = require("../decorators/role.decorator");
 const is_admin_guard_1 = require("../guards/is-admin.guard");
 const roles_enum_1 = require("../enums/roles.enum");
+const swagger_1 = require("@nestjs/swagger");
 let DiscountController = class DiscountController {
     discountService;
     constructor(discountService) {
@@ -34,7 +35,13 @@ let DiscountController = class DiscountController {
 };
 exports.DiscountController = DiscountController;
 __decorate([
+    (0, swagger_1.ApiOperation)({
+        summary: 'ახალი ფასდაკლების შექმნა (მხოლოდ ადმინისტრატორისთვის)',
+    }),
+    (0, swagger_1.ApiResponse)({ status: 201, description: 'ფასდაკლება წარმატებით შეიქმნა' }),
+    (0, swagger_1.ApiResponse)({ status: 403, description: 'წვდომა აკრძალულია' }),
     (0, common_1.Post)(),
+    (0, swagger_1.ApiSecurity)('token'),
     (0, common_1.UseGuards)(is_admin_guard_1.IsAdminGuard),
     (0, role_decorator_1.Roles)(roles_enum_1.Role.ADMIN),
     __param(0, (0, common_1.Body)()),
@@ -43,6 +50,17 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], DiscountController.prototype, "create", null);
 __decorate([
+    (0, swagger_1.ApiOperation)({ summary: 'ფასდაკლებების სიის მიღება' }),
+    (0, swagger_1.ApiQuery)({
+        name: 'active',
+        required: false,
+        type: Boolean,
+        description: 'თუ true-ა, აბრუნებს მხოლოდ აქტიურ ფასდაკლებებს',
+    }),
+    (0, swagger_1.ApiResponse)({
+        status: 200,
+        description: 'ფასდაკლებების სია წარმატებით დაბრუნდა',
+    }),
     (0, common_1.Get)(),
     __param(0, (0, common_1.Query)('active')),
     __metadata("design:type", Function),
@@ -50,6 +68,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], DiscountController.prototype, "findAll", null);
 exports.DiscountController = DiscountController = __decorate([
+    (0, swagger_1.ApiTags)('discount'),
     (0, common_1.Controller)('discount'),
     __metadata("design:paramtypes", [discount_service_1.DiscountService])
 ], DiscountController);

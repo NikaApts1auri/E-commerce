@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateDiscountDto = void 0;
+const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
 const class_transformer_1 = require("class-transformer");
 class CreateDiscountDto {
@@ -19,12 +20,20 @@ class CreateDiscountDto {
 }
 exports.CreateDiscountDto = CreateDiscountDto;
 __decorate([
+    (0, swagger_1.ApiProperty)({
+        example: 15,
+        description: 'ფასდაკლების პროცენტი (1-დან 100-მდე)',
+    }),
     (0, class_validator_1.IsNumber)(),
     (0, class_validator_1.Min)(1, { message: 'ფასდაკლება უნდა იყოს მინიმუმ 1%' }),
     (0, class_validator_1.Max)(100, { message: 'ფასდაკლება არ შეიძლება იყოს 100%-ზე მეტი' }),
     __metadata("design:type", Number)
 ], CreateDiscountDto.prototype, "percentage", void 0);
 __decorate([
+    (0, swagger_1.ApiPropertyOptional)({
+        example: 'Summer Sale',
+        description: 'ფასდაკლების სახელი (ოპციონალური)',
+    }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsNotEmpty)({ message: 'პროდუქტის სახელი არ უნდა იყოს ცარიელი' }),
@@ -32,6 +41,10 @@ __decorate([
     __metadata("design:type", String)
 ], CreateDiscountDto.prototype, "name", void 0);
 __decorate([
+    (0, swagger_1.ApiPropertyOptional)({
+        example: 'SUMMER2026',
+        description: 'პროდუქტის კოდი ფასდაკლებისთვის (ოპციონალური)',
+    }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsNotEmpty)({ message: 'პროდუქტის კოდი არ უნდა იყოს ცარიელი' }),

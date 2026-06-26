@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UpdateCartDto = void 0;
+const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
 class UpdateCartDto {
     productId;
@@ -17,10 +18,19 @@ class UpdateCartDto {
 }
 exports.UpdateCartDto = UpdateCartDto;
 __decorate([
+    (0, swagger_1.ApiProperty)({
+        example: '64f1b2b3c4d5e6f7a8b9c0d1',
+        description: 'პროდუქტის ID, რომლის რაოდენობაც უნდა შეიცვალოს',
+    }),
     (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], UpdateCartDto.prototype, "productId", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({
+        example: 2,
+        description: 'ახალი რაოდენობა (მინიმუმ 1)',
+    }),
     (0, class_validator_1.IsInt)(),
     (0, class_validator_1.Min)(1),
     __metadata("design:type", Number)

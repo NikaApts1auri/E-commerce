@@ -18,6 +18,7 @@ const auth_service_1 = require("./auth.service");
 const sign_in_dto_1 = require("./dto/sign-in.dto");
 const sign_up_dto_1 = require("./dto/sign-up.dto");
 const google_oauth_guard_1 = require("../guards/google-oauth.guard");
+const swagger_1 = require("@nestjs/swagger");
 let AuthController = class AuthController {
     authService;
     constructor(authService) {
@@ -93,6 +94,8 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "googleRedirect", null);
 __decorate([
+    (0, swagger_1.ApiOperation)({ summary: 'მომხმარებლის რეგისტრაცია' }),
+    (0, swagger_1.ApiResponse)({ status: 201, description: 'წარმატებით დარეგისტრირდა' }),
     (0, common_1.Post)('/sign-up'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -100,6 +103,8 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "signUp", null);
 __decorate([
+    (0, swagger_1.ApiOperation)({ summary: 'მომხმარებლის შესვლა სისტემაში' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'წარმატებული ავტორიზაცია' }),
     (0, common_1.Post)('/sign-in'),
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.Res)()),
@@ -108,6 +113,8 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "signIn", null);
 __decorate([
+    (0, swagger_1.ApiOperation)({ summary: 'პაროლის აღდგენის მოთხოვნა' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'ინსტრუქცია გაიგზავნა ფოსტაზე' }),
     (0, common_1.Post)('/forgot-password'),
     __param(0, (0, common_1.Body)('email')),
     __metadata("design:type", Function),
@@ -115,6 +122,8 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "forgotPassword", null);
 __decorate([
+    (0, swagger_1.ApiOperation)({ summary: 'პაროლის განახლება' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'პაროლი წარმატებით შეიცვალა' }),
     (0, common_1.Post)('/reset-password'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -122,6 +131,8 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "resetPassword", null);
 __decorate([
+    (0, swagger_1.ApiOperation)({ summary: 'სისტემიდან გასვლა' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'წარმატებით გავიდა სისტემიდან' }),
     (0, common_1.Post)('/logout'),
     __param(0, (0, common_1.Res)()),
     __metadata("design:type", Function),
@@ -129,6 +140,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "logout", null);
 exports.AuthController = AuthController = __decorate([
+    (0, swagger_1.ApiTags)('auth'),
     (0, common_1.Controller)('auth'),
     __metadata("design:paramtypes", [auth_service_1.AuthService])
 ], AuthController);

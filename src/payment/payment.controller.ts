@@ -3,21 +3,38 @@ import {
   Post,
   RawBodyRequest,
   Req,
-  Res,
   Headers,
-  InternalServerErrorException,
   BadRequestException,
 } from '@nestjs/common';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiHeader,
+  ApiExcludeEndpoint,
+} from '@nestjs/swagger';
 import { PaymentService } from './payment.service';
-import { OrderService } from '../order/order.service';
-import { ConfigService } from '@nestjs/config';
-import * as Stripe from 'stripe';
-import { Response } from 'express';
 
+@ApiTags('payment')
 @Controller('payment')
 export class PaymentController {
   constructor(private readonly paymentService: PaymentService) {}
 
+  @ApiOperation({
+    summary: 'Stripe Webhook',
+    description:
+      'ეს ენდპოინტი გამოიყენება მხოლოდ Stripe-ის მიერ გადახდის სტატუსის განახლებისთვის. მომხმარებლისთვის არ არის განკუთვნილი.',
+  })
+  @ApiHeader({
+    name: 'stripe-signature',
+    description: 'Stripe-ის მიერ გამოგზავნილი დაცვის ხელმოწერა',
+    required: true,
+  })
+  @ApiResponse({ status: 200, description: 'Webhook წარმატებით მიღებულია' })
+  @ApiResponse({
+    status: 400,
+    description: 'არასწორი მოთხოვნა (Missing Raw Body)',
+  })
   @Post('webhook')
   async handleWebhook(
     @Req() req: RawBodyRequest<Request>,
