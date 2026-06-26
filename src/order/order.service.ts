@@ -5,6 +5,7 @@ import { Order } from './schema/order.schema';
 import { Product } from 'src/products/schema/product.schema';
 import { EmailSenderService } from 'src/email-sender/email-sender.service';
 import { User } from 'src/users/schema/user.entity';
+import { CreateOrderDto } from './dto/order.dto';
 
 @Injectable()
 export class OrderService {
@@ -53,5 +54,21 @@ export class OrderService {
       });
     }
     console.log(`Inventory decremented for order: ${order._id}`);
+  }
+  async create(createOrderDto: CreateOrderDto): Promise<Order> {
+    const newOrder = new this.orderModel(createOrderDto);
+    return await newOrder.save();
+  }
+
+  // 2. შეკვეთის პოვნა ID-ით
+  async findOne(id: string): Promise<Order> {
+    const order = await this.orderModel
+      .findById(id)
+      .populate('items.productId')
+      .exec();
+    if (!order) {
+      throw new NotFoundException(`შეკვეთა ID-ით ${id} ვერ მოიძებნა`);
+    }
+    return order;
   }
 }
