@@ -1,5 +1,5 @@
 node_modules
-dist
+
 .env
 # AI Agent folders
 .aider*
