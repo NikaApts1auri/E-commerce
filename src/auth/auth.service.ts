@@ -54,9 +54,8 @@ export class AuthService {
         });
         console.log('Email successfully sent!');
       } catch (err) {
-        // აქ დავინახავთ ზუსტ მიზეზს: Authentication, Connection Timeout, ან სხვა
-        console.error('CRITICAL EMAIL ERROR:', err);
-        throw err; // დავამატოთ throw, რომ Postman-შიც დავინახოთ შეცდომა
+        console.error('Resend API Error:', err.response?.data || err.message);
+        throw err;
       }
     }
 

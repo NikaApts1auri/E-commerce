@@ -14,8 +14,8 @@ export declare class ProductsController {
         };
     }>;
     findOne(id: string): Promise<any>;
-    createProduct(createProductDto: CreateProductDto, file: Express.Multer.File): Promise<import("mongoose").Document<unknown, {}, import("./schema/product.schema").Product> & import("./schema/product.schema").Product & Required<{
-        _id: unknown;
+    createProduct(createProductDto: CreateProductDto, file: Express.Multer.File): Promise<import("mongoose").Document<unknown, {}, import("./schema/product.schema").Product, {}, {}> & import("./schema/product.schema").Product & Required<{
+        _id: import("mongoose").Types.ObjectId;
     }> & {
         __v: number;
     }>;

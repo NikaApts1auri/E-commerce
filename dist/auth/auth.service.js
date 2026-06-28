@@ -30,7 +30,9 @@ let AuthService = class AuthService {
         this.emailService = emailService;
     }
     async forgotPassword(email) {
+        console.log('Searching for user with email:', email);
         const user = await this.userModel.findOne({ email });
+        console.log(`Password reset requested for: ${email}. User found: ${!!user}`);
         if (user) {
             const rawResetToken = crypto.randomBytes(32).toString('hex');
             const hashedResetToken = crypto
@@ -43,15 +45,21 @@ let AuthService = class AuthService {
                 resetPasswordToken: hashedResetToken,
                 resetPasswordExpires: resetTokenExpires,
             });
-            const resetLink = `${process.env.FRONT_URI || 'http://localhost:3000'}/auth/reset-password?token=${rawResetToken}`;
-            this.emailService
-                .sendEmailSomeone({
-                to: user.email,
-                subject: 'პაროლის აღდგენა - E-commerce',
-                text: `პაროლის აღდგენის ბმული: ${resetLink}`,
-                html: `<p>პაროლის შესაცვლელად გადადით <a href="${resetLink}">ბმულზე</a></p>`,
-            })
-                .catch((err) => console.error('Email sending failed:', err));
+            const resetLink = `${process.env.FRONT_URL || 'http://localhost:3000'}/auth/reset-password?token=${rawResetToken}`;
+            try {
+                console.log('Sending email...');
+                await this.emailService.sendEmailSomeone({
+                    to: user.email,
+                    subject: 'პაროლის აღდგენა - E-commerce',
+                    text: `პაროლის აღდგენის ბმული: ${resetLink}`,
+                    html: `<p>პაროლის შესაცვლელად გადადით <a href="${resetLink}">ბმულზე</a></p>`,
+                });
+                console.log('Email successfully sent!');
+            }
+            catch (err) {
+                console.error('Resend API Error:', err.response?.data || err.message);
+                throw err;
+            }
         }
         return {
             message: 'თუ ელ-ფოსტა რეგისტრირებულია, თქვენ მიიღებთ აღდგენის ინსტრუქციას.',

@@ -6,7 +6,7 @@ export declare class UsersService {
     private userModel;
     constructor(userModel: Model<User>);
     findAll({ page, take }: QueryParams): Promise<{
-        users: (import("mongoose").Document<unknown, {}, User> & User & {
+        users: (import("mongoose").Document<unknown, {}, User, {}, {}> & User & {
             _id: import("mongoose").Types.ObjectId;
         } & {
             __v: number;
@@ -15,17 +15,17 @@ export declare class UsersService {
         page: number;
         take: number;
     }>;
-    findOne(id: string): Promise<import("mongoose").Document<unknown, {}, User> & User & {
+    findOne(id: string): Promise<import("mongoose").Document<unknown, {}, User, {}, {}> & User & {
         _id: import("mongoose").Types.ObjectId;
     } & {
         __v: number;
     }>;
-    updateUser(requesterId: string, targetUserId: string, dto: UpdateUserDto): Promise<(import("mongoose").Document<unknown, {}, User> & User & {
+    updateUser(requesterId: string, targetUserId: string, dto: UpdateUserDto): Promise<(import("mongoose").Document<unknown, {}, User, {}, {}> & User & {
         _id: import("mongoose").Types.ObjectId;
     } & {
         __v: number;
     }) | null>;
-    deleteUser(requesterId: string, targetUserId: string): Promise<(import("mongoose").Document<unknown, {}, User> & User & {
+    deleteUser(requesterId: string, targetUserId: string): Promise<(import("mongoose").Document<unknown, {}, User, {}, {}> & User & {
         _id: import("mongoose").Types.ObjectId;
     } & {
         __v: number;

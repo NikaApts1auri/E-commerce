@@ -50,6 +50,8 @@ export class AuthController {
   async signUp(@Body() signUpDto: SignUpDto) {
     return await this.authService.signUp(signUpDto);
   }
+
+  
   @ApiOperation({ summary: 'მომხმარებლის შესვლა სისტემაში' })
   @ApiResponse({ status: 200, description: 'წარმატებული ავტორიზაცია' })
   @Post('/sign-in')

@@ -6,8 +6,8 @@ import mongoose, { Document } from 'mongoose';
   toJSON: {
     virtuals: true,
     transform: function (doc, ret) {
-      delete ret._id;
-      delete ret.__v;
+      const { _id, __v, ...rest } = ret;
+      return rest;
     },
   },
 })

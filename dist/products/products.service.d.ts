@@ -20,8 +20,8 @@ export declare class ProductsService {
     }>;
     findOne(id: string): Promise<any>;
     private generateUniqueProductCode;
-    create(createProductDto: CreateProductDto, file?: Express.Multer.File): Promise<import("mongoose").Document<unknown, {}, Product> & Product & Required<{
-        _id: unknown;
+    create(createProductDto: CreateProductDto, file?: Express.Multer.File): Promise<import("mongoose").Document<unknown, {}, Product, {}, {}> & Product & Required<{
+        _id: import("mongoose").Types.ObjectId;
     }> & {
         __v: number;
     }>;

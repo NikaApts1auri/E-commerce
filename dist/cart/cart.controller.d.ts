@@ -1,6 +1,7 @@
 import { CartService } from './cart.service';
 import { AddToCartDto } from './dto/add-to-cart.dto';
 import { Request } from 'express';
+import { Types } from 'mongoose';
 import { UpdateCartDto } from './dto/update-cart.dto';
 interface RequestWithUser extends Request {
     user: {
@@ -14,22 +15,22 @@ export declare class CartController {
         message: string;
     }>;
     getCart(req: RequestWithUser): Promise<import("mongoose").FlattenMaps<import("./schema/cart.schema").Cart> & Required<{
-        _id: import("mongoose").FlattenMaps<unknown>;
+        _id: Types.ObjectId;
     }> & {
         __v: number;
     }>;
-    removeItem(req: RequestWithUser, productId: string): Promise<(import("mongoose").Document<unknown, {}, import("./schema/cart.schema").Cart> & import("./schema/cart.schema").Cart & Required<{
-        _id: unknown;
+    removeItem(req: RequestWithUser, productId: string): Promise<(import("mongoose").Document<unknown, {}, import("./schema/cart.schema").Cart, {}, {}> & import("./schema/cart.schema").Cart & Required<{
+        _id: Types.ObjectId;
     }> & {
         __v: number;
     }) | null>;
-    clearCart(req: RequestWithUser): Promise<(import("mongoose").Document<unknown, {}, import("./schema/cart.schema").Cart> & import("./schema/cart.schema").Cart & Required<{
-        _id: unknown;
+    clearCart(req: RequestWithUser): Promise<(import("mongoose").Document<unknown, {}, import("./schema/cart.schema").Cart, {}, {}> & import("./schema/cart.schema").Cart & Required<{
+        _id: Types.ObjectId;
     }> & {
         __v: number;
     }) | null>;
-    updateItem(req: RequestWithUser, dto: UpdateCartDto): Promise<(import("mongoose").Document<unknown, {}, import("./schema/cart.schema").Cart> & import("./schema/cart.schema").Cart & Required<{
-        _id: unknown;
+    updateItem(req: RequestWithUser, dto: UpdateCartDto): Promise<(import("mongoose").Document<unknown, {}, import("./schema/cart.schema").Cart, {}, {}> & import("./schema/cart.schema").Cart & Required<{
+        _id: Types.ObjectId;
     }> & {
         __v: number;
     }) | null>;

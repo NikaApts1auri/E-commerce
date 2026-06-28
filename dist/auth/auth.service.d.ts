@@ -1,9 +1,9 @@
 import { Model } from 'mongoose';
 import { JwtService } from '@nestjs/jwt';
-import { EmailSenderService } from 'src/email-sender/email-sender.service';
+import { EmailSenderService } from "../email-sender/email-sender.service";
 import { SignInDto } from './dto/sign-in.dto';
 import { SignUpDto } from './dto/sign-up.dto';
-import { User } from 'src/users/schema/user.entity';
+import { User } from "../users/schema/user.entity";
 export declare class AuthService {
     private userModel;
     private jwtService;
@@ -20,7 +20,7 @@ export declare class AuthService {
     }>;
     signInWithGoogle(user: any): Promise<string>;
     signUp({ email, fullName, password }: SignUpDto): Promise<string>;
-    getCurrentUser(userId: string): Promise<(import("mongoose").Document<unknown, {}, User> & User & {
+    getCurrentUser(userId: string): Promise<(import("mongoose").Document<unknown, {}, User, {}, {}> & User & {
         _id: import("mongoose").Types.ObjectId;
     } & {
         __v: number;

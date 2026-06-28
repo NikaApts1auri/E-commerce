@@ -1,8 +1,8 @@
 import { Model } from 'mongoose';
 import { Order } from './schema/order.schema';
-import { Product } from 'src/products/schema/product.schema';
-import { EmailSenderService } from 'src/email-sender/email-sender.service';
-import { User } from 'src/users/schema/user.entity';
+import { Product } from "../products/schema/product.schema";
+import { EmailSenderService } from "../email-sender/email-sender.service";
+import { User } from "../users/schema/user.entity";
 import { CreateOrderDto } from './dto/order.dto';
 export declare class OrderService {
     private readonly orderModel;
