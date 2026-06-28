@@ -40,7 +40,7 @@ export class AuthService {
       });
 
       // მომხმარებელს მეილზე მისდის ორიგინალი (raw) ტოკენი
-      const resetLink = `${process.env.FRONT_URI || 'http://localhost:3000'}/auth/reset-password?token=${rawResetToken}`;
+      const resetLink = `${process.env.FRONT_URL || 'http://localhost:3000'}/auth/reset-password?token=${rawResetToken}`;
 
       // მეილის გაგზავნა ფონურ რეჟიმში (await-ის გარეშე, რომ იუზერმა დიდხანს არ ელოდოს პასუხს)
       this.emailService
