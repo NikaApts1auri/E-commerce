@@ -43,7 +43,7 @@ export class AuthService {
       const resetLink = `${process.env.FRONT_URL || 'http://localhost:3000'}/auth/reset-password?token=${rawResetToken}`;
 
       // მეილის გაგზავნა ფონურ რეჟიმში (await-ის გარეშე, რომ იუზერმა დიდხანს არ ელოდოს პასუხს)
-      this.emailService
+      await this.emailService
         .sendEmailSomeone({
           to: user.email,
           subject: 'პაროლის აღდგენა - E-commerce',
