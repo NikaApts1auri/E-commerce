@@ -13,6 +13,8 @@ export class EmailSenderService {
     text,
     html,
   }: SendEmailDto & { html?: string }): Promise<void> {
+    console.log('--- STARTING EMAIL SENDING ---');
+    console.log('To:', to);
     try {
       await this.mailerService.sendMail({
         to,
@@ -21,9 +23,10 @@ export class EmailSenderService {
         text,
         html,
       });
-      console.log(`[Email Success] წერილი წარმატებით გაეგზავნა: ${to}`);
+      console.log('--- EMAIL SENT SUCCESSFULLY ---');
     } catch (error) {
-      console.error(`[Email Error] ვერ გაიგზავნა ${to}-ზე:`, error);
+      console.error('--- EMAIL FAILED TO SEND ---');
+      console.error('Error Details:', error);
       throw new InternalServerErrorException(`იმეილის გაგზავნა ჩავარდა: ${to}`);
     }
   }

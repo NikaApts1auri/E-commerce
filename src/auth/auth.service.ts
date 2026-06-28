@@ -19,6 +19,7 @@ export class AuthService {
   ) {}
 
   async forgotPassword(email: string) {
+    console.log('Searching for user with email:', email);
     const user = await this.userModel.findOne({ email });
 
     // ვამატებთ ლოგს, რომ ვნახოთ, იპოვა თუ არა იუზერი სერვერმა
