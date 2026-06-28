@@ -63,7 +63,7 @@ exports.Product = Product = __decorate([
     (0, mongoose_1.Schema)({
         toJSON: {
             virtuals: true,
-            transform: function (doc, ret) {
+            transform: function (_doc, ret) {
                 const { _id, __v, ...rest } = ret;
                 return rest;
             },

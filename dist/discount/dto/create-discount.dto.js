@@ -16,6 +16,7 @@ const class_transformer_1 = require("class-transformer");
 class CreateDiscountDto {
     percentage;
     name;
+    saleName;
     productCode;
 }
 exports.CreateDiscountDto = CreateDiscountDto;
@@ -31,15 +32,24 @@ __decorate([
 ], CreateDiscountDto.prototype, "percentage", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({
-        example: 'Summer Sale',
-        description: 'ფასდაკლების სახელი (ოპციონალური)',
+        example: 'iphone 14 pro',
+        description: 'პროდუქტის სახელი',
     }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsNotEmpty)({ message: 'პროდუქტის სახელი არ უნდა იყოს ცარიელი' }),
     (0, class_transformer_1.Transform)(({ value }) => value?.trim()),
     __metadata("design:type", String)
 ], CreateDiscountDto.prototype, "name", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({
+        example: 'Sale for iphone 14 pro',
+        description: 'მარკეტინგული სახელი ფასდაკლებისთვის',
+    }),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_transformer_1.Transform)(({ value }) => value?.trim()),
+    __metadata("design:type", String)
+], CreateDiscountDto.prototype, "saleName", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({
         example: 'SUMMER2026',

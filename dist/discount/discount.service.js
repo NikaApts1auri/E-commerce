@@ -26,7 +26,7 @@ let DiscountService = class DiscountService {
         this.productModel = productModel;
     }
     async create(createDiscountDto) {
-        const { percentage, name, productCode } = createDiscountDto;
+        const { percentage, name, saleName, productCode } = createDiscountDto;
         if (!name && !productCode) {
             throw new common_1.BadRequestException('გთხოვთ მიუთითოთ პროდუქტის სახელი ან კოდი');
         }
@@ -42,12 +42,19 @@ let DiscountService = class DiscountService {
         if (existingActiveDiscount) {
             throw new common_1.BadRequestException('ამ პროდუქტზე უკვე არსებობს აქტიური ფასდაკლება!');
         }
+        const oldPrice = foundProduct.price;
+        const newPrice = oldPrice - (oldPrice * percentage) / 100;
         const now = new Date();
         const oneMonthLater = new Date();
         oneMonthLater.setMonth(now.getMonth() + 1);
         const newDiscount = new this.discountModel({
-            name: `Sale for ${foundProduct.name}`,
+            name: foundProduct.name,
+            saleName: `Sale for ${foundProduct.name}`,
             percentage,
+            priceDetails: {
+                oldPrice: foundProduct.price,
+                newPrice: foundProduct.price - (foundProduct.price * percentage) / 100,
+            },
             applicableProducts: [foundProduct._id],
             startDate: now,
             endDate: oneMonthLater,

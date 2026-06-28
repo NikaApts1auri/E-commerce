@@ -14,7 +14,9 @@ const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
 let Discount = class Discount extends mongoose_2.Document {
     name;
+    saleName;
     percentage;
+    priceDetails;
     applicableProducts;
     startDate;
     endDate;
@@ -26,9 +28,17 @@ __decorate([
     __metadata("design:type", String)
 ], Discount.prototype, "name", void 0);
 __decorate([
+    (0, mongoose_1.Prop)({ trim: true }),
+    __metadata("design:type", String)
+], Discount.prototype, "saleName", void 0);
+__decorate([
     (0, mongoose_1.Prop)({ required: true, min: 1, max: 99 }),
     __metadata("design:type", Number)
 ], Discount.prototype, "percentage", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: Object }),
+    __metadata("design:type", Object)
+], Discount.prototype, "priceDetails", void 0);
 __decorate([
     (0, mongoose_1.Prop)({ type: [{ type: mongoose_2.Types.ObjectId, ref: 'Product' }], default: [] }),
     __metadata("design:type", Array)
@@ -46,7 +56,7 @@ __decorate([
     __metadata("design:type", Boolean)
 ], Discount.prototype, "isActive", void 0);
 exports.Discount = Discount = __decorate([
-    (0, mongoose_1.Schema)({ timestamps: true })
+    (0, mongoose_1.Schema)({ timestamps: true, strict: true })
 ], Discount);
 exports.DiscountSchema = mongoose_1.SchemaFactory.createForClass(Discount);
 //# sourceMappingURL=discount.schema.js.map

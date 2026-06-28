@@ -7,6 +7,13 @@ export declare class AppController {
     sendEmail(emailData: SendEmailDto): Promise<{
         success: boolean;
         message: string;
-        meta: any;
+        meta: {
+            message: string;
+            stats: {
+                totalTarget: number;
+                successful: number;
+                failed: number;
+            };
+        };
     }>;
 }

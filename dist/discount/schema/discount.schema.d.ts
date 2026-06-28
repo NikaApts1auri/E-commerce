@@ -1,7 +1,12 @@
 import { Document, Types } from 'mongoose';
 export declare class Discount extends Document {
     name: string;
+    saleName: string;
     percentage: number;
+    priceDetails: {
+        oldPrice: number;
+        newPrice: number;
+    };
     applicableProducts: Types.ObjectId[];
     startDate: Date;
     endDate: Date;

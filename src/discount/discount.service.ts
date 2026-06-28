@@ -13,12 +13,13 @@ export class DiscountService {
   ) {}
 
   async create(createDiscountDto: CreateDiscountDto): Promise<Discount> {
-    const { percentage, name, productCode } = createDiscountDto;
+    const { percentage, name, saleName, productCode } = createDiscountDto;
 
     if (!name && !productCode) {
       throw new BadRequestException('გთხოვთ მიუთითოთ პროდუქტის სახელი ან კოდი');
     }
 
+    // 2. პროდუქტის ძებნა
     const searchCondition = name ? { name } : { productCode };
     const foundProduct = await this.productModel
       .findOne({ isDeleted: { $ne: true }, ...searchCondition })
@@ -29,22 +30,30 @@ export class DiscountService {
     }
 
     const productIdStr = (foundProduct._id as any).toString();
-
     const existingActiveDiscount =
       await this.getActiveDiscountForProduct(productIdStr);
+
     if (existingActiveDiscount) {
       throw new BadRequestException(
         'ამ პროდუქტზე უკვე არსებობს აქტიური ფასდაკლება!',
       );
     }
 
+    const oldPrice = foundProduct.price;
+    const newPrice = oldPrice - (oldPrice * percentage) / 100;
+
     const now = new Date();
     const oneMonthLater = new Date();
     oneMonthLater.setMonth(now.getMonth() + 1);
 
     const newDiscount = new this.discountModel({
-      name: `Sale for ${foundProduct.name}`,
+      name: foundProduct.name,
+      saleName: `Sale for ${foundProduct.name}`,
       percentage,
+      priceDetails: {
+        oldPrice: foundProduct.price,
+        newPrice: foundProduct.price - (foundProduct.price * percentage) / 100,
+      },
       applicableProducts: [foundProduct._id as any],
       startDate: now,
       endDate: oneMonthLater,

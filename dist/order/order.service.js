@@ -51,12 +51,21 @@ let OrderService = class OrderService {
     }
     async decrementInventory(order) {
         for (const item of order.items) {
-            const productId = item.productId || item._id;
-            await this.productModel.findByIdAndUpdate(productId, {
-                $inc: { stock: -1 },
-            });
+            const productId = item.productId;
+            const quantity = item.quantity || 1;
+            const result = await this.productModel.findOneAndUpdate({
+                _id: productId,
+                stock: { $gte: quantity },
+            }, {
+                $inc: { stock: -quantity },
+            }, { new: true });
+            if (!result) {
+                console.error(`Failed to decrement inventory for product: ${productId}. Insufficient stock or product not found.`);
+            }
+            else {
+                console.log(`Inventory decremented by ${quantity} for product: ${productId}`);
+            }
         }
-        console.log(`Inventory decremented for order: ${order._id}`);
     }
     async create(createOrderDto) {
         const newOrder = new this.orderModel(createOrderDto);

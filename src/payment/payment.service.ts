@@ -2,24 +2,28 @@ import {
   BadRequestException,
   Injectable,
   InternalServerErrorException,
+  Inject,
+  forwardRef,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as Stripe from 'stripe';
+import { OrderService } from '../order/order.service';
 
 @Injectable()
 export class PaymentService {
   private stripe: Stripe;
-  orderService: any;
 
-  constructor(private readonly configService: ConfigService) {
+  constructor(
+    private readonly configService: ConfigService,
+    @Inject(forwardRef(() => OrderService))
+    private readonly orderService: OrderService,
+  ) {
     const stripeSecretKey = this.configService.get<string>('STRIPE_SECRET_KEY');
-
     if (!stripeSecretKey) {
       throw new InternalServerErrorException(
         'STRIPE_SECRET_KEY is not defined',
       );
     }
-
     this.stripe = new Stripe(stripeSecretKey, {
       apiVersion: '2026-06-24.dahlia',
     });
@@ -37,47 +41,38 @@ export class PaymentService {
       throw new InternalServerErrorException(`Stripe Error: ${error.message}`);
     }
   }
-  //
-  constructWebhookEvent(rawBody: Buffer, signature: string): Stripe.Event {
-    const webhookSecret = this.configService.get<string>(
-      'STRIPE_WEBHOOK_SECRET',
-    );
-    if (!webhookSecret) {
-      throw new Error('STRIPE_WEBHOOK_SECRET is not defined');
-    }
 
-    try {
-      return this.stripe.webhooks.constructEvent(
-        rawBody,
-        signature,
-        webhookSecret,
-      );
-    } catch (err) {
-      throw new BadRequestException(`Webhook Error: ${err.message}`);
-    }
-  }
-  //
-  // src/payment/payment.service.ts
   async handleWebhookEvent(rawBody: Buffer, sig: string) {
     const webhookSecret = this.configService.get<string>(
       'STRIPE_WEBHOOK_SECRET',
     );
-    const event = this.stripe.webhooks.constructEvent(
-      rawBody,
-      sig,
-      webhookSecret!,
-    );
+
+    // ვერიფიკაცია
+    let event: Stripe.Event;
+    try {
+      event = this.stripe.webhooks.constructEvent(rawBody, sig, webhookSecret!);
+    } catch (err) {
+      throw new BadRequestException(`Webhook Error: ${err.message}`);
+    }
 
     const paymentIntent = event.data.object as Stripe.PaymentIntent;
-    const orderId = paymentIntent.metadata.orderId;
+    const orderId = paymentIntent.metadata?.orderId;
 
+    if (!orderId) {
+      console.error('Webhook received without orderId metadata');
+      return;
+    }
+
+    // მოვლენების დამუშავება
     switch (event.type) {
       case 'payment_intent.succeeded':
-        if (orderId) await this.orderService.updateStatus(orderId, 'paid');
+        await this.orderService.updateStatus(orderId, 'paid');
         break;
       case 'payment_intent.payment_failed':
-        if (orderId) await this.orderService.updateStatus(orderId, 'failed');
+        await this.orderService.updateStatus(orderId, 'failed');
         break;
+      default:
+        console.log(`Unhandled event type: ${event.type}`);
     }
   }
 }

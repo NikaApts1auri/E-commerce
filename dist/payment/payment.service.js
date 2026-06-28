@@ -8,17 +8,22 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PaymentService = void 0;
 const common_1 = require("@nestjs/common");
 const config_1 = require("@nestjs/config");
 const Stripe = require("stripe");
+const order_service_1 = require("../order/order.service");
 let PaymentService = class PaymentService {
     configService;
-    stripe;
     orderService;
-    constructor(configService) {
+    stripe;
+    constructor(configService, orderService) {
         this.configService = configService;
+        this.orderService = orderService;
         const stripeSecretKey = this.configService.get('STRIPE_SECRET_KEY');
         if (!stripeSecretKey) {
             throw new common_1.InternalServerErrorException('STRIPE_SECRET_KEY is not defined');
@@ -40,38 +45,38 @@ let PaymentService = class PaymentService {
             throw new common_1.InternalServerErrorException(`Stripe Error: ${error.message}`);
         }
     }
-    constructWebhookEvent(rawBody, signature) {
+    async handleWebhookEvent(rawBody, sig) {
         const webhookSecret = this.configService.get('STRIPE_WEBHOOK_SECRET');
-        if (!webhookSecret) {
-            throw new Error('STRIPE_WEBHOOK_SECRET is not defined');
-        }
+        let event;
         try {
-            return this.stripe.webhooks.constructEvent(rawBody, signature, webhookSecret);
+            event = this.stripe.webhooks.constructEvent(rawBody, sig, webhookSecret);
         }
         catch (err) {
             throw new common_1.BadRequestException(`Webhook Error: ${err.message}`);
         }
-    }
-    async handleWebhookEvent(rawBody, sig) {
-        const webhookSecret = this.configService.get('STRIPE_WEBHOOK_SECRET');
-        const event = this.stripe.webhooks.constructEvent(rawBody, sig, webhookSecret);
         const paymentIntent = event.data.object;
-        const orderId = paymentIntent.metadata.orderId;
+        const orderId = paymentIntent.metadata?.orderId;
+        if (!orderId) {
+            console.error('Webhook received without orderId metadata');
+            return;
+        }
         switch (event.type) {
             case 'payment_intent.succeeded':
-                if (orderId)
-                    await this.orderService.updateStatus(orderId, 'paid');
+                await this.orderService.updateStatus(orderId, 'paid');
                 break;
             case 'payment_intent.payment_failed':
-                if (orderId)
-                    await this.orderService.updateStatus(orderId, 'failed');
+                await this.orderService.updateStatus(orderId, 'failed');
                 break;
+            default:
+                console.log(`Unhandled event type: ${event.type}`);
         }
     }
 };
 exports.PaymentService = PaymentService;
 exports.PaymentService = PaymentService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [config_1.ConfigService])
+    __param(1, (0, common_1.Inject)((0, common_1.forwardRef)(() => order_service_1.OrderService))),
+    __metadata("design:paramtypes", [config_1.ConfigService,
+        order_service_1.OrderService])
 ], PaymentService);
 //# sourceMappingURL=payment.service.js.map

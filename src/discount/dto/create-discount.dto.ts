@@ -20,14 +20,22 @@ export class CreateDiscountDto {
   percentage: number;
 
   @ApiPropertyOptional({
-    example: 'Summer Sale',
-    description: 'ფასდაკლების სახელი (ოპციონალური)',
+    example: 'iphone 14 pro',
+    description: 'პროდუქტის სახელი',
   })
   @IsString()
   @IsOptional()
-  @IsNotEmpty({ message: 'პროდუქტის სახელი არ უნდა იყოს ცარიელი' })
   @Transform(({ value }) => value?.trim())
   name?: string;
+
+  @ApiPropertyOptional({
+    example: 'Sale for iphone 14 pro',
+    description: 'მარკეტინგული სახელი ფასდაკლებისთვის',
+  })
+  @IsString()
+  @IsOptional()
+  @Transform(({ value }) => value?.trim())
+  saleName?: string;
 
   @ApiPropertyOptional({
     example: 'SUMMER2026',

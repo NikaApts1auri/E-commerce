@@ -4,5 +4,12 @@ export declare class AppService {
     private readonly emailSenderService;
     constructor(emailSenderService: EmailSenderService);
     getHello(): string;
-    sendEmailToSomeone(sendEmailDto: SendEmailDto): Promise<any>;
+    sendEmailToSomeone(sendEmailDto: SendEmailDto): Promise<{
+        message: string;
+        stats: {
+            totalTarget: number;
+            successful: number;
+            failed: number;
+        };
+    }>;
 }

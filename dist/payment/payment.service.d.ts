@@ -1,13 +1,12 @@
 import { ConfigService } from '@nestjs/config';
-import * as Stripe from 'stripe';
+import { OrderService } from '../order/order.service';
 export declare class PaymentService {
     private readonly configService;
+    private readonly orderService;
     private stripe;
-    orderService: any;
-    constructor(configService: ConfigService);
+    constructor(configService: ConfigService, orderService: OrderService);
     createPaymentIntent(orderId: string, amount: number): Promise<{
         clientSecret: string | null;
     }>;
-    constructWebhookEvent(rawBody: Buffer, signature: string): Stripe.Event;
     handleWebhookEvent(rawBody: Buffer, sig: string): Promise<void>;
 }

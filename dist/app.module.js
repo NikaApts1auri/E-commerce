@@ -14,6 +14,7 @@ const users_module_1 = require("./users/users.module");
 const auth_module_1 = require("./auth/auth.module");
 const aws_s3_module_1 = require("./aws-s3/aws-s3.module");
 const email_sender_module_1 = require("./email-sender/email-sender.module");
+const mailer_1 = require("@nestjs-modules/mailer");
 const app_service_1 = require("./app.service");
 const app_controller_1 = require("./app.controller");
 const products_module_1 = require("./products/products.module");
@@ -35,6 +36,17 @@ exports.AppModule = AppModule = __decorate([
                 isGlobal: true,
             }),
             mongoose_1.MongooseModule.forRoot(process.env.MONGO_URL),
+            mailer_1.MailerModule.forRoot({
+                transport: {
+                    host: process.env.EMAIL_HOST,
+                    port: parseInt(process.env.EMAIL_PORT),
+                    secure: true,
+                    auth: {
+                        user: process.env.EMAIL_USER,
+                        pass: process.env.EMAIL_PASS,
+                    },
+                },
+            }),
             users_module_1.UsersModule,
             auth_module_1.AuthModule,
             aws_s3_module_1.AwsS3Module,
