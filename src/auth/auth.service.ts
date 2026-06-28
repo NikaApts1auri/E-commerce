@@ -21,11 +21,13 @@ export class AuthService {
   async forgotPassword(email: string) {
     const user = await this.userModel.findOne({ email });
 
-    // უსაფრთხოების დაცვა: არ ვამჟღავნებთ არსებობს თუ არა იუზერი
+    // ვამატებთ ლოგს, რომ ვნახოთ, იპოვა თუ არა იუზერი სერვერმა
+    console.log(
+      `Password reset requested for: ${email}. User found: ${!!user}`,
+    );
+
     if (user) {
       const rawResetToken = crypto.randomBytes(32).toString('hex');
-
-      // უსაფრთხოება: ბაზაში ვინახავთ დაჰეშილ ტოკენს
       const hashedResetToken = crypto
         .createHash('sha256')
         .update(rawResetToken)
@@ -39,18 +41,22 @@ export class AuthService {
         resetPasswordExpires: resetTokenExpires,
       });
 
-      // მომხმარებელს მეილზე მისდის ორიგინალი (raw) ტოკენი
       const resetLink = `${process.env.FRONT_URL || 'http://localhost:3000'}/auth/reset-password?token=${rawResetToken}`;
 
-      // მეილის გაგზავნა ფონურ რეჟიმში (await-ის გარეშე, რომ იუზერმა დიდხანს არ ელოდოს პასუხს)
-      await this.emailService
-        .sendEmailSomeone({
+      try {
+        console.log('Sending email...');
+        await this.emailService.sendEmailSomeone({
           to: user.email,
           subject: 'პაროლის აღდგენა - E-commerce',
           text: `პაროლის აღდგენის ბმული: ${resetLink}`,
           html: `<p>პაროლის შესაცვლელად გადადით <a href="${resetLink}">ბმულზე</a></p>`,
-        })
-        .catch((err) => console.error('Email sending failed:', err));
+        });
+        console.log('Email successfully sent!');
+      } catch (err) {
+        // აქ დავინახავთ ზუსტ მიზეზს: Authentication, Connection Timeout, ან სხვა
+        console.error('CRITICAL EMAIL ERROR:', err);
+        throw err; // დავამატოთ throw, რომ Postman-შიც დავინახოთ შეცდომა
+      }
     }
 
     return {
